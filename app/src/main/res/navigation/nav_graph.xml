@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/RecipesListFragment">
+
+    <fragment
+        android:id="@+id/RecipesListFragment"
+        android:name="com.example.class3demo2.RecipesListFragment"
+        android:label="Recipes List"
+        tools:layout="@layout/fragment_recipe_list">
+        <action
+            android:id="@+id/action_studentsListFragment_to_blueFragment"
+            app:destination="@id/recipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recipeFragment"
+        android:name="com.example.class3demo2.RecipeFragment"
+        android:label="fragment_recipe"
+        tools:layout="@layout/fragment_recipe_page">
+        <argument
+            android:name="blueTitle"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/saveRecipe"
+        android:name="com.example.class3demo2.AddRecipeFragment"
+        android:label="Add Recipe"
+        tools:layout="@layout/fragment_add_recipe" />
+    <action android:id="@+id/action_global_addStudentFragment" app:destination="@id/saveRecipe" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.class3demo2.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about" />
+</navigation>
