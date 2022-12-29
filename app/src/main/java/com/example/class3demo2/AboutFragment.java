@@ -37,7 +37,6 @@ public class AboutFragment extends Fragment {
             dialog.show();
         });
 
-
         binding.dateInputEt.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

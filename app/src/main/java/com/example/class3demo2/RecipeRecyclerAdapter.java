@@ -1,9 +1,14 @@
 package com.example.class3demo2;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.class3demo2.model.Recipe;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
@@ -19,10 +25,9 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
     //findViewBy:
     TextView nameTv;
     TextView idTv;
+    ImageView img;
     CheckBox cb;
     List<Recipe> data;
-
-
 
     //create 1 student row
     public RecipeViewHolder(@NonNull View itemView, RecipeRecyclerAdapter.OnItemClickListener listener, List<Recipe> data) {
@@ -31,12 +36,13 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
         nameTv = itemView.findViewById(R.id.recipelistrow_name_tv);
         idTv = itemView.findViewById(R.id.recipelistrow_id_tv);
         cb = itemView.findViewById(R.id.recipelistrow_cb);
+       // img = itemView.findViewById(R.id.recipelistrow_avatar_img);
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int pos = (int)cb.getTag();
-                Recipe st = data.get(pos);
-                st.cb = cb.isChecked();
+                Recipe re = data.get(pos);
+                re.cb = cb.isChecked();
             }
         });
         itemView.setOnClickListener(new View.OnClickListener() {  //click on student in the list
@@ -54,6 +60,8 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
         idTv.setText(re.id);
         cb.setChecked(re.cb);
         cb.setTag(pos);
+
+       // img.setImageURI(Uri.parse(re.avatarUrl));
     }
 }
 
@@ -67,6 +75,13 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
 
     LayoutInflater inflater;
     List<Recipe> data;
+    public void setData(List<Recipe> data){
+        this.data=data;
+        for(Recipe l: data){
+            Log.d("re", l.id);
+        }
+        notifyDataSetChanged();
+    }
     public RecipeRecyclerAdapter(LayoutInflater inflater, List<Recipe> data){
         this.inflater = inflater;
         this.data = data;

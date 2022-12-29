@@ -1,27 +1,59 @@
 package com.example.class3demo2.model;
 
-import java.util.LinkedList;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.os.HandlerCompat;
+import androidx.recyclerview.widget.ListUpdateCallback;
+
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Model {
+
     private static final Model _instance = new Model();
+    private Executor executor = Executors.newSingleThreadExecutor();
+    private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
     public static Model instance(){
         return _instance;
     }
+
     private Model(){
-        for(int i=0;i<20;i++){
-            addRecipe(new Recipe("שם מתכון " + i,""+i,"",false));
-        }
+
     }
 
-    List<Recipe> data = new LinkedList<>();
-    public List<Recipe> getAllRecipes(){
-        return data;
+    AppLocalDbRepository localDb = AppLocalDb.getAppDb();
+    public interface getAllRecipeListener{
+        void onComplete(List<Recipe> data);
+
     }
 
-    public void addRecipe(Recipe re){
-        data.add(re);
+    public void getAllRecipes(getAllRecipeListener callback ){
+        executor.execute(()->{
+            List<Recipe> data = localDb.recipeDao().getAll();
+            mainHandler.post(()->{
+                callback.onComplete(data);
+            });
+
+        });
+
+    }
+
+    public interface AddRecipeListener{
+        void onComplete();
+    }
+
+    public void addRecipe(Recipe re, AddRecipeListener listener){
+        executor.execute(()->{
+            localDb.recipeDao().insertAll(re);
+            mainHandler.post(()->{
+                listener.onComplete();
+            });
+
+        });
     }
 
 
