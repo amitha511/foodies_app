@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    android:label="Profile"
     app:startDestination="@id/RecipesListFragment">
 
     <fragment
@@ -11,27 +12,100 @@
         android:label="Recipes List"
         tools:layout="@layout/fragment_recipe_list">
         <action
-            android:id="@+id/action_studentsListFragment_to_blueFragment"
+            android:id="@+id/action_RecipesListFragment_to_recipeFragment"
             app:destination="@id/recipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/recipeFragment"
         android:name="com.example.class3demo2.RecipeFragment"
-        android:label="fragment_recipe"
+        android:label="Recipe Page"
         tools:layout="@layout/fragment_recipe_page">
         <argument
-            android:name="blueTitle"
+            android:name="NameRecipe"
             app:argType="string" />
+        <argument
+            android:name="Ingredients"
+            app:argType="string" />
+        <argument
+            android:name="Instructions"
+            app:argType="string" />
+        <argument
+            android:name="avatarUrl"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/saveRecipe"
+        android:id="@+id/addRecipe"
         android:name="com.example.class3demo2.AddRecipeFragment"
         android:label="Add Recipe"
         tools:layout="@layout/fragment_add_recipe" />
-    <action android:id="@+id/action_global_addStudentFragment" app:destination="@id/saveRecipe" />
+    <action
+        android:id="@+id/action_global_addStudentFragment"
+        app:destination="@id/addRecipe" />
     <fragment
-        android:id="@+id/aboutFragment"
-        android:name="com.example.class3demo2.AboutFragment"
-        android:label="About"
-        tools:layout="@layout/fragment_about" />
+        android:id="@+id/LikesFragment"
+        android:name="com.example.class3demo2.SaveFragment"
+        android:label="Save Recipes"
+        tools:layout="@layout/fragment_save_recipe">
+        <action
+            android:id="@+id/action_LikesFragment_to_recipeFragment"
+            app:destination="@id/recipeFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_LikesFragment"
+        app:destination="@id/LikesFragment" />
+    <fragment
+        android:id="@+id/Profile"
+        android:name="com.example.class3demo2.ProfileFragment"
+        android:label="my_profile"
+        tools:layout="@layout/fragment_my_profile" >
+        <action
+            android:id="@+id/action_Profile_to_fragment_user_recipe_page"
+            app:destination="@id/fragment_user_recipe_page" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_Profile"
+        app:destination="@id/Profile" />
+    <fragment
+        android:id="@+id/fragment_user_recipe_page"
+        android:name="com.example.class3demo2.UserRecipePageFragment"
+        android:label="User Recipe Page "
+        tools:layout="@layout/fragment_user_recipe_page">
+        <argument
+            android:name="NameRecipe"
+            app:argType="string" />
+        <argument
+            android:name="Ingredients"
+            app:argType="string" />
+        <argument
+            android:name="Instructions"
+            app:argType="string" />
+        <argument
+            android:name="avatarUrl"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_fragment_user_recipe_page_to_editUserRecipePageFragment2"
+            app:destination="@id/editUserRecipePageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editUserRecipePageFragment"
+        android:name="com.example.class3demo2.EditUserRecipePageFragment"
+        android:label="Edit Recipe Page"
+        tools:layout="@layout/fragment_edit_user_recipe_page">
+    <argument
+        android:name="NameRecipe"
+        app:argType="string" />
+    <argument
+        android:name="Ingredients"
+        app:argType="string" />
+    <argument
+        android:name="Instructions"
+        app:argType="string" />
+    <argument
+        android:name="avatarUrl"
+        app:argType="string"
+        app:nullable="true" />
+    </fragment>
+
 </navigation>

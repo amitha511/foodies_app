@@ -14,23 +14,31 @@ public class Recipe {
     public String id="";
     public String avatarUrl="";
     public Boolean cb=false;
+    public String instructions="";
+    public String ingredients="";
 
     public Recipe(){}
 
-    public Recipe(String name, String id, String avatarUrl, Boolean cb) {
+    public Recipe(String name, String id, String avatarUrl, Boolean cb,String instructions,String ingredients) {
         this.name = name;
         this.id = id;
         this.avatarUrl = avatarUrl;
         this.cb = cb;
-    }
-
-    public String getName() {
-        return name;
+        this.ingredients=ingredients;
+        this.instructions=instructions;
     }
 
     @NonNull
     public String getId() {
         return id;
+    }
+
+    public void setId(@NonNull String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getAvatarUrl() {
@@ -45,9 +53,6 @@ public class Recipe {
         this.name = name;
     }
 
-    public void setId(@NonNull String id) {
-        this.id = id;
-    }
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
@@ -55,5 +60,22 @@ public class Recipe {
 
     public void setCb(Boolean cb) {
         this.cb = cb;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 }

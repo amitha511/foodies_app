@@ -2,6 +2,7 @@ package com.example.class3demo2;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.class3demo2.databinding.FragmentRecipeListBinding;
+import com.example.class3demo2.databinding.RecipeListRowBinding;
+import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
 
 import java.nio.charset.StandardCharsets;
@@ -28,11 +32,14 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
     ImageView img;
     CheckBox cb;
     List<Recipe> data;
+    RecipeListRowBinding binding;
+
 
     //create 1 student row
     public RecipeViewHolder(@NonNull View itemView, RecipeRecyclerAdapter.OnItemClickListener listener, List<Recipe> data) {
         super(itemView);
         this.data = data;
+
         nameTv = itemView.findViewById(R.id.recipelistrow_name_tv);
         idTv = itemView.findViewById(R.id.recipelistrow_id_tv);
         cb = itemView.findViewById(R.id.recipelistrow_cb);
@@ -43,6 +50,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
                 int pos = (int)cb.getTag();
                 Recipe re = data.get(pos);
                 re.cb = cb.isChecked();
+                Model.instance().UpdateRecipe(re,()->{});
             }
         });
         itemView.setOnClickListener(new View.OnClickListener() {  //click on student in the list
@@ -77,9 +85,6 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
     List<Recipe> data;
     public void setData(List<Recipe> data){
         this.data=data;
-        for(Recipe l: data){
-            Log.d("re", l.id);
-        }
         notifyDataSetChanged();
     }
     public RecipeRecyclerAdapter(LayoutInflater inflater, List<Recipe> data){

@@ -4,12 +4,11 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
-import androidx.recyclerview.widget.ListUpdateCallback;
 
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Model {
 
@@ -31,15 +30,14 @@ public class Model {
 
     }
 
+
     public void getAllRecipes(getAllRecipeListener callback ){
         executor.execute(()->{
             List<Recipe> data = localDb.recipeDao().getAll();
             mainHandler.post(()->{
                 callback.onComplete(data);
             });
-
         });
-
     }
 
     public interface AddRecipeListener{
@@ -55,6 +53,18 @@ public class Model {
 
         });
     }
+
+
+    public void UpdateRecipe(Recipe re,AddRecipeListener listener){
+        executor.execute(()->{
+            localDb.recipeDao().update(re);
+            mainHandler.post(()->{
+                listener.onComplete();
+            });
+        });
+    }
+
+
 
 
 }

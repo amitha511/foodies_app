@@ -11,8 +11,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -20,6 +18,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,14 +27,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageButton;
-import android.widget.ImageView;
-
 import com.example.class3demo2.databinding.FragmentAddRecipeBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
-
-import java.io.File;
 
 public class AddRecipeFragment extends Fragment {
     private static final int RESULT_LOAD_IMAGED=1;
@@ -51,7 +45,7 @@ public class AddRecipeFragment extends Fragment {
 
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menu.removeItem(R.id.saveRecipe);  //remove bottom add in up menu
+                menu.removeItem(R.id.addRecipe);  //remove bottom add in up menu
             }
 
             @Override
@@ -97,8 +91,15 @@ public class AddRecipeFragment extends Fragment {
         });
         binding.saveBtn.setOnClickListener(view1 -> {
             String name = binding.nameEt.getText().toString();
-            String id = binding.idEt.getText().toString();
-            Recipe re = new Recipe(name,id,imageUri.toString(),false);
+            String inst = binding.instructionsEt.getText().toString();
+            String ingr = binding.ingredientsEt.getText().toString();
+            String id = name;
+            String image = "";
+
+            if(imageUri != null)
+                image = imageUri.toString();
+
+            Recipe re = new Recipe(name,id,image,false,inst,ingr);
             Model.instance().addRecipe(re,()->{
                 Navigation.findNavController(view1).popBackStack();
             });
