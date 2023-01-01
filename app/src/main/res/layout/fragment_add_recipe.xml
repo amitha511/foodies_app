@@ -104,12 +104,12 @@
                     android:orientation="vertical">
 
                     <ImageButton
-                        android:id="@+id/addImage"
+                        android:id="@+id/removeImage"
                         android:layout_width="70sp"
                         android:layout_height="1sp"
                         android:layout_marginLeft="60sp"
                         android:layout_weight="1"
-                        android:src="@drawable/ic_baseline_add_a_photo_" />
+                        android:src="@drawable/ic_baseline_remove_circle_outline_24" />
 
                     <ImageView
                         android:id="@+id/avatarImg"

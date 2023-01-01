@@ -23,10 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class SaveFragment extends Fragment {
+public class SaveFragment extends RecipesListFragment {
     FragmentSaveRecipeBinding binding;
-    List<Recipe> data = new LinkedList<>();
-    RecipeRecyclerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +41,7 @@ public class SaveFragment extends Fragment {
         public void onItemClick(int pos) {
             Log.d("TAG", "Row was clicked " + pos);
             Recipe re = data.get(pos);
-            SaveFragmentDirections.ActionLikesFragmentToRecipeFragment action = SaveFragmentDirections.actionLikesFragmentToRecipeFragment(re.name,re.ingredients,re.instructions,null);
+            SaveFragmentDirections.ActionLikesFragmentToRecipeFragment action = SaveFragmentDirections.actionLikesFragmentToRecipeFragment(re.name,re.ingredients,re.instructions,re.avatarUrl);
             Navigation.findNavController(view).navigate(action);
         }
         });
@@ -51,12 +49,6 @@ public class SaveFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        reloadData();
-        //list of student
-    }
-
     void reloadData(){
         binding.progressBar2.setVisibility(View.VISIBLE);
         Model.instance().getAllRecipes((reList)->{

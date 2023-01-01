@@ -18,10 +18,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends RecipesListFragment {
     FragmentMyProfileBinding binding;
-    List<Recipe> data = new LinkedList<>();
-    RecipeRecyclerAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,18 +44,12 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        reloadData();
-        //list of student
-    }
-
     void reloadData(){
         binding.progressBar3.setVisibility(View.VISIBLE);
         Model.instance().getAllRecipes((reList)->{
             data.removeAll(data);
             for(Recipe re : reList){
-                if(re.name.equals("amit"))
+                if(re.name.equals("hi"))
                     data.add(re);
             }
             adapter.setData(data);

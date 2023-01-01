@@ -17,22 +17,16 @@ import com.example.class3demo2.databinding.FragmentAddRecipeBinding;
 import com.example.class3demo2.databinding.FragmentRecipePageBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 public class RecipeFragment extends Fragment {
     TextView titleTv;
     String title;
     String ingredients;
     String instructions;
-    ImageView avatarImg;
+    String avatarImg;
     FragmentRecipePageBinding binding;
 
-    public static RecipeFragment newInstance(String title){
-        RecipeFragment frag = new RecipeFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("TITLE",title);
-        frag.setArguments(bundle);
-        return frag;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,14 +43,7 @@ public class RecipeFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentRecipePageBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
-
-       // View view = inflater.inflate(R.layout.fragment_recipe_page, container, false);
-
-        title = RecipeFragmentArgs.fromBundle(getArguments()).getNameRecipe();
-        ingredients = RecipeFragmentArgs.fromBundle(getArguments()).getIngredients();
-        instructions = RecipeFragmentArgs.fromBundle(getArguments()).getInstructions();
-
-      //  avatarImg.setImageURI(Uri.parse(RecipeFragmentArgs.fromBundle(getArguments()).getAvatarUrl()));
+        getElement();
 
         if (title != null){
             binding.recipeTitleTv.setText(title);
@@ -67,6 +54,9 @@ public class RecipeFragment extends Fragment {
         if (instructions != null){
             binding.InstructionsTv.setText(instructions);
         }
+        if (avatarImg != null){
+            Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
+        }
 
         //View button = view.findViewById(R.id.recipe_back_btn);
         binding.backBtn.setOnClickListener((view1)->{
@@ -75,10 +65,12 @@ public class RecipeFragment extends Fragment {
         return view;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-        if (titleTv != null){
-            titleTv.setText(title);
-        }
+    public void getElement() {
+
+        title = RecipeFragmentArgs.fromBundle(getArguments()).getNameRecipe();
+        ingredients = RecipeFragmentArgs.fromBundle(getArguments()).getIngredients();
+        instructions = RecipeFragmentArgs.fromBundle(getArguments()).getInstructions();
+        avatarImg = (RecipeFragmentArgs.fromBundle(getArguments()).getAvatarUrl());
+
     }
 }

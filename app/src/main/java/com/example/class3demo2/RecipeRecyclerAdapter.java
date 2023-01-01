@@ -1,5 +1,6 @@
 package com.example.class3demo2;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,12 +20,14 @@ import com.example.class3demo2.databinding.FragmentRecipeListBinding;
 import com.example.class3demo2.databinding.RecipeListRowBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
-class RecipeViewHolder extends RecyclerView.ViewHolder{
+class RecipeViewHolder extends RecyclerView.ViewHolder {
 
     //findViewBy:
     TextView nameTv;
@@ -43,14 +46,15 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
         nameTv = itemView.findViewById(R.id.recipelistrow_name_tv);
         idTv = itemView.findViewById(R.id.recipelistrow_id_tv);
         cb = itemView.findViewById(R.id.recipelistrow_cb);
-       // img = itemView.findViewById(R.id.recipelistrow_avatar_img);
+        img = itemView.findViewById(R.id.recipelistrow_avatar_img);
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int pos = (int)cb.getTag();
+                int pos = (int) cb.getTag();
                 Recipe re = data.get(pos);
                 re.cb = cb.isChecked();
-                Model.instance().UpdateRecipe(re,()->{});
+                Model.instance().UpdateRecipe(re, () -> {
+                });
             }
         });
         itemView.setOnClickListener(new View.OnClickListener() {  //click on student in the list
@@ -68,8 +72,15 @@ class RecipeViewHolder extends RecyclerView.ViewHolder{
         idTv.setText(re.id);
         cb.setChecked(re.cb);
         cb.setTag(pos);
+        String path = re.avatarUrl;
+        Log.d("path",path);
+        if(path == null)
+            path = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=768,574";
 
-       // img.setImageURI(Uri.parse(re.avatarUrl));
+        Picasso.get().load(path).error(R.drawable.errorpizza).into(img);
+        // if photo up from gallery you see - error pizza because the permission of google.
+        //if you see sakshoka photo  - is default photo , user don't entry photo
+
     }
 }
 
