@@ -8,7 +8,7 @@
         android:title="Add"
         app:showAsAction="always" />
     <item
-        android:id="@+id/LikesFragment"
+        android:id="@+id/registerUserFragment"
         android:icon="@drawable/ic_baseline_info_24"
         android:title="about"
         app:showAsAction="ifRoom" />

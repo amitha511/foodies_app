@@ -5,6 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Entity
 public class Recipe {
@@ -27,6 +30,30 @@ public class Recipe {
         this.ingredients=ingredients;
         this.instructions=instructions;
     }
+
+    public static Recipe fromJson(Map<String,Object> json){
+        String id = (String) json.get("id");
+        String name = (String) json.get("name");
+        String avatarUrl = (String)json.get("avatarUrl");
+        String instructions =(String) json.get("instructions");
+        String ingredients = (String) json.get("ingredients");
+        Boolean cb = (Boolean)json.get("cb");
+        Recipe re= new Recipe(name,id,avatarUrl,cb,instructions,ingredients);
+
+        return re;
+    }
+
+    public Map<String,Object> toJson(){
+        Map<String, Object> json = new HashMap<>();
+        json.put("id", getId());
+        json.put("name", getName());
+        json.put("avatarUrl", getAvatarUrl());
+        json.put("instructions", getInstructions());
+        json.put("ingredients",getIngredients());
+        json.put("cb", getCb());
+        return json;
+    }
+
 
     @NonNull
     public String getId() {

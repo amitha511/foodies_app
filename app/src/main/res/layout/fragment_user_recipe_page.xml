@@ -117,10 +117,11 @@
 
                     <ImageView
                         android:id="@+id/avatarImg"
-                        android:layout_width="wrap_content"
+                        android:layout_width="164dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:isScrollContainer="false"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/profile" />
 
                 </LinearLayout>

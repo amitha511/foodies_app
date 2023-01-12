@@ -63,7 +63,7 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -82,8 +82,8 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="197dp"
-                        android:layout_height="198dp"
+                        android:layout_width="201dp"
+                        android:layout_height="253dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
@@ -92,40 +92,45 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/ingredientsEt"
                             android:layout_width="match_parent"
-                            android:layout_height="184dp"
+                            android:layout_height="match_parent"
                             android:hint="Ingredients" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="300sp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageButton
-                        android:id="@+id/removeImage"
-                        android:layout_width="70sp"
-                        android:layout_height="1sp"
-                        android:layout_marginLeft="60sp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_baseline_remove_circle_outline_24" />
 
                     <ImageView
                         android:id="@+id/avatarImg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="101dp"
+                        android:layout_width="164dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:isScrollContainer="false"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/profile" />
 
-                </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/gallerybutton"
+                        android:layout_width="69dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="bottom|left"
+                        android:src="@drawable/ic_baseline_add_box_24" />
+
+                    <ImageButton
+                        android:id="@+id/camerabutton"
+                        android:layout_width="70dp"
+                        android:layout_height="59dp"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_add_a_photo_" />
+                </FrameLayout>
 
             </LinearLayout>
-
-            <Space
-                android:layout_width="250dp"
-                android:layout_height="30sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"

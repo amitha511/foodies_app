@@ -39,7 +39,7 @@
                 android:id="@+id/avatarImg2"
                 android:layout_width="match_parent"
                 android:layout_height="213dp"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/profile" />
 
             <Space
@@ -92,7 +92,7 @@
                 android:layout_marginRight="8sp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextTextEmailAddress"
+                    android:id="@+id/Email"
                     android:layout_width="399dp"
                     android:layout_height="50dp"
                     android:hint="Email" />
@@ -106,7 +106,7 @@
                 android:layout_marginRight="8sp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextTextPassword"
+                    android:id="@+id/pas"
                     android:layout_width="399dp"
                     android:layout_height="50dp"
                     android:hint="Password" />
@@ -119,7 +119,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/camerabutton"
                     android:layout_width="62dp"
                     android:layout_height="54dp"
                     android:layout_marginLeft="8sp"
@@ -142,7 +142,7 @@
                 android:layout_height="35dp" />
 
             <Button
-                android:id="@+id/adduser_save_btn"
+                android:id="@+id/login"
                 android:layout_width="195dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="110sp"

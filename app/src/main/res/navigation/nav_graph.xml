@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    android:label="Profile"
-    app:startDestination="@id/RecipesListFragment">
+    android:label="welcome"
+    app:startDestination="@id/welcomeFragment">
 
     <fragment
         android:id="@+id/RecipesListFragment"
@@ -58,7 +58,7 @@
         android:id="@+id/Profile"
         android:name="com.example.class3demo2.ProfileFragment"
         android:label="my_profile"
-        tools:layout="@layout/fragment_my_profile" >
+        tools:layout="@layout/fragment_my_profile">
         <action
             android:id="@+id/action_Profile_to_fragment_user_recipe_page"
             app:destination="@id/fragment_user_recipe_page" />
@@ -93,19 +93,44 @@
         android:name="com.example.class3demo2.EditUserRecipePageFragment"
         android:label="Edit Recipe Page"
         tools:layout="@layout/fragment_edit_user_recipe_page">
-    <argument
-        android:name="NameRecipe"
-        app:argType="string" />
-    <argument
-        android:name="Ingredients"
-        app:argType="string" />
-    <argument
-        android:name="Instructions"
-        app:argType="string" />
-    <argument
-        android:name="avatarUrl"
-        app:argType="string"
-        app:nullable="true" />
+        <argument
+            android:name="NameRecipe"
+            app:argType="string" />
+        <argument
+            android:name="Ingredients"
+            app:argType="string" />
+        <argument
+            android:name="Instructions"
+            app:argType="string" />
+        <argument
+            android:name="avatarUrl"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerUserFragment"
+        android:name="com.example.class3demo2.RegisterUserFragment"
+        android:label="RegisterUserFragment"
+        tools:layout="@layout/fragment_add_user">
+        <action
+            android:id="@+id/action_registerUserFragment_to_RecipesListFragment"
+            app:destination="@id/RecipesListFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_addUser"
+        app:destination="@id/registerUserFragment" />
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.class3demo2.WelcomeFragment"
+        android:label="WelcomeFragment"
+        tools:layout="@layout/fragment_welcome_page">
+
+        <action
+            android:id="@+id/action_welcomeFragment_to_registerUserFragment"
+            app:destination="@id/registerUserFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_RecipesListFragment"
+            app:destination="@id/RecipesListFragment" />
     </fragment>
 
 </navigation>

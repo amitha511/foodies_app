@@ -34,13 +34,13 @@ public class SaveFragment extends RecipesListFragment {
 
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecipeRecyclerAdapter(getLayoutInflater(),data);
+        adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(int pos) {
             Log.d("TAG", "Row was clicked " + pos);
-            Recipe re = data.get(pos);
+            Recipe re = viewModel.getData().get(pos);
             SaveFragmentDirections.ActionLikesFragmentToRecipeFragment action = SaveFragmentDirections.actionLikesFragmentToRecipeFragment(re.name,re.ingredients,re.instructions,re.avatarUrl);
             Navigation.findNavController(view).navigate(action);
         }
@@ -52,12 +52,12 @@ public class SaveFragment extends RecipesListFragment {
     void reloadData(){
         binding.progressBar2.setVisibility(View.VISIBLE);
         Model.instance().getAllRecipes((reList)->{
-            data.removeAll(data);
+            viewModel.getData().removeAll(viewModel.getData());
             for(Recipe re : reList){
                 if(re.cb == true)
-                    data.add(re);
+                    viewModel.getData().add(re);
             }
-            adapter.setData(data);
+            adapter.setData(viewModel.getData());
             binding.progressBar2.setVisibility(View.GONE);
         });
     }

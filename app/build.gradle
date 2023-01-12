@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
-
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -45,6 +45,8 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation platform('com.google.firebase:firebase-bom:31.1.1')
+    implementation 'com.google.firebase:firebase-analytics'
 
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment:$nav_version"
@@ -53,8 +55,11 @@ dependencies {
     def room_version = "2.4.3"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-
+    implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-storage'
     implementation "com.squareup.picasso:picasso:2.8"
+    implementation 'com.google.firebase:firebase-auth'
+
 
 
 

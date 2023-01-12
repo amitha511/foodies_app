@@ -19,11 +19,6 @@ public class UserRecipePageFragment extends RecipeFragment {
 
     FragmentUserRecipePageBinding binding;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);  //save state
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +27,8 @@ public class UserRecipePageFragment extends RecipeFragment {
         binding = FragmentUserRecipePageBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
         this.getElement();
+
+        avatarImg = (RecipeFragmentArgs.fromBundle(getArguments()).getAvatarUrl());
 
         if (title != null){
             binding.recipeTitleTv.setText(title);
@@ -42,8 +39,10 @@ public class UserRecipePageFragment extends RecipeFragment {
         if (instructions != null){
             binding.InstructionsTv.setText(instructions);
         }
-        if (avatarImg != null){
+        if (avatarImg != ""){
             Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
+        }else{
+            binding.avatarImg.setImageResource(R.drawable.photorecipe);
         }
 
         binding.recipeEditBtn.setOnClickListener((view2)->{

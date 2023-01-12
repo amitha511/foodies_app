@@ -62,11 +62,11 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="221dp"
+                    android:layout_width="222dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="4sp"
                     android:orientation="vertical">
@@ -95,26 +95,38 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <LinearLayout
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="300sp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <ImageButton
-                        android:id="@+id/removeImage"
-                        android:layout_width="64dp"
-                        android:layout_height="56dp"
-                        android:layout_marginLeft="60sp"
-                        android:src="@drawable/ic_baseline_remove_circle_outline_24" />
 
                     <ImageView
                         android:id="@+id/avatarImg"
-                        android:layout_width="180dp"
-                        android:layout_height="176dp"
+                        android:layout_width="164dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:isScrollContainer="false"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/profile" />
 
-                </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/gallerybutton"
+                        android:layout_width="69dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="bottom|left"
+                        android:src="@drawable/ic_baseline_add_box_24" />
+
+                    <ImageButton
+                        android:id="@+id/camerabutton"
+                        android:layout_width="70dp"
+                        android:layout_height="59dp"
+                        android:layout_gravity="bottom|right"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_baseline_add_a_photo_" />
+                </FrameLayout>
 
             </LinearLayout>
 
@@ -161,7 +173,7 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/saveBtn"
+                    android:id="@+id/login"
                     android:layout_width="195dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110sp"

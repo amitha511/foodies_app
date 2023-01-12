@@ -1,8 +1,11 @@
 package com.example.class3demo2;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,8 +24,8 @@ import java.util.List;
 
 public class RecipesListFragment extends Fragment {
     FragmentRecipeListBinding binding;
-    List<Recipe> data = new LinkedList<>();
     RecipeRecyclerAdapter adapter;
+    RecipeListFragmentViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,20 +35,26 @@ public class RecipesListFragment extends Fragment {
 
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecipeRecyclerAdapter(getLayoutInflater(),data);
+        adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
-                Recipe re = data.get(pos);
-                RecipesListFragmentDirections.ActionRecipesListFragmentToRecipeFragment action = RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(re.name,re.ingredients,re.instructions,re.avatarUrl);
+                Recipe re = viewModel.getData().get(pos);
+                RecipesListFragmentDirections.ActionRecipesListFragmentToRecipeFragment action = RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(re.getName(),re.getIngredients(),re.getInstructions(),re.getAvatarUrl());
                 Navigation.findNavController(view).navigate(action);
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(RecipeListFragmentViewModel.class);
     }
 
     @Override
@@ -58,8 +67,8 @@ public class RecipesListFragment extends Fragment {
     void reloadData(){
         binding.progressBar.setVisibility(View.VISIBLE);
         Model.instance().getAllRecipes((reList)->{
-            data = reList;
-            adapter.setData(data);
+            viewModel.setData(reList);
+            adapter.setData(viewModel.getData());
             binding.progressBar.setVisibility(View.GONE);
         });
     }

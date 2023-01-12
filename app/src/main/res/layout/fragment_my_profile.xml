@@ -8,8 +8,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="414dp"
-        android:layout_height="326dp"
+        android:layout_width="413dp"
+        android:layout_height="304dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -39,12 +39,22 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13999999" />
+        app:layout_constraintVertical_bias="0.07999998" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:layout_marginBottom="111dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titelSaveRecipe3"
+        app:layout_constraintVertical_bias="0.0" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="411dp"
-        android:layout_height="196dp"
+        android:layout_height="183dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +66,8 @@
             android:id="@+id/avatarImg3"
             android:layout_width="378dp"
             android:layout_height="174dp"
+            android:layout_marginLeft="8sp"
+            android:layout_marginRight="8sp"
             android:layout_weight="1"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/profile" />
@@ -72,14 +84,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/profilenameEt2"
+                    android:id="@+id/firstName"
                     android:layout_width="139dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
                     android:text="first name" />
 
                 <TextView
-                    android:id="@+id/profilenameEt"
+                    android:id="@+id/lastName"
                     android:layout_width="126dp"
                     android:layout_height="match_parent"
                     android:text="Last name" />
@@ -91,7 +103,7 @@
                 android:layout_height="40sp" />
 
             <TextView
-                android:id="@+id/profilenameEt3"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_weight="1"
@@ -104,7 +116,7 @@
         android:id="@+id/imageView3"
         android:layout_width="49dp"
         android:layout_height="47dp"
-        android:layout_marginTop="16sp"
+        android:layout_marginTop="1dp"
         android:layout_marginRight="16sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"

@@ -4,10 +4,17 @@ package com.example.class3demo2;
 import static android.app.Activity.RESULT_OK;
 
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -18,6 +25,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,14 +39,16 @@ import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
 
 public class AddRecipeFragment extends Fragment {
-    private static final int RESULT_LOAD_IMAGED=1;
     FragmentAddRecipeBinding binding;
-    String imageString = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=768,574";
+    Boolean isAvatarSelected = false;
+    ActivityResultLauncher<Void> cameraLauncher;
+    ActivityResultLauncher<String> galleryAppLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentActivity parentActivity = getActivity(); //return this
+
 
         //update menu:
         parentActivity.addMenuProvider(new MenuProvider() {
@@ -53,20 +63,32 @@ public class AddRecipeFragment extends Fragment {
                 return false;
             }
         }, this, Lifecycle.State.RESUMED);
+
+
+        cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(),
+                new ActivityResultCallback<Bitmap>() {
+                    @Override
+                    public void onActivityResult(Bitmap result) {
+                        if (result != null) {
+                            binding.avatarImg.setImageBitmap(result);
+                            isAvatarSelected = true;
+                        }
+                    }
+        });
+
+        galleryAppLauncher = registerForActivityResult(new
+                ActivityResultContracts.GetContent(), new
+                ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri result) {
+                        if (result != null) {
+                            binding.avatarImg.setImageURI(result);
+                            isAvatarSelected = true;
+                        }
+                    }
+        });
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGED && resultCode == RESULT_OK && data != null) {
-            Uri imageDataUri = data.getData();
-            binding.avatarImg.setImageURI(imageDataUri);
-            if(imageDataUri.toString() != null)
-                imageString = imageDataUri.toString();
-
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,44 +97,49 @@ public class AddRecipeFragment extends Fragment {
         binding = FragmentAddRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
-        binding.avatarImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.avatarImg:
-                        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(galleryIntent, RESULT_LOAD_IMAGED);
-                        break;
-                    case R.id.removeImage:
-
-                        break;
-                }
-            }
-
-        });
-
-        binding.removeImage.setOnClickListener(view1->{
-            imageString = null;
-        });
-
         binding.saveBtn.setOnClickListener(view1 -> {
-            String name = binding.nameEt.getText().toString();
-            String inst = binding.instructionsEt.getText().toString();
-            String ingr = binding.ingredientsEt.getText().toString();
-            String id = name;
-            if(imageString == null)
-                imageString = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=768,574";
-            Recipe re = new Recipe(name,id,imageString,false,inst,ingr);
-            Model.instance().addRecipe(re,()->{
-                Navigation.findNavController(view1).popBackStack();
-            });
+          saveRecipe(view1);
         });
 
+        binding.cancellBtn.setOnClickListener(view1 ->
+                Navigation.findNavController(view1).popBackStack(R.id.RecipesListFragment,false));
 
-        binding.cancellBtn.setOnClickListener(view1 -> Navigation.findNavController(view1).popBackStack(R.id.RecipesListFragment,false));
+        binding.camerabutton.setOnClickListener(view1->{
+            cameraLauncher.launch(null);
+        });
 
+        binding.gallerybutton.setOnClickListener(view1->{
+            galleryAppLauncher.launch("image/*");
+        });
 
         return view;
+    }
+
+
+    public void saveRecipe(View view1){
+        String name = binding.nameEt.getText().toString();
+        String instructions = binding.instructionsEt.getText().toString();
+        String ingredients = binding.ingredientsEt.getText().toString();
+        String id = name;
+        Recipe re = new Recipe(name,id,"",false,instructions,ingredients);
+
+        if(isAvatarSelected){
+            binding.avatarImg.setDrawingCacheEnabled(true);
+            binding.avatarImg.buildDrawingCache();
+            Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+            Model.instance().uploadImage(id,bitmap,url->{
+                if(url != null){
+                    re.setAvatarUrl(url);
+                }
+                Model.instance().addRecipe(re,(unused)->{
+                    Navigation.findNavController(view1).popBackStack();
+                });
+            });
+        }else {
+            Model.instance().addRecipe(re, (unused) -> {
+                Navigation.findNavController(view1).popBackStack();
+            });
+        }
     }
 
 

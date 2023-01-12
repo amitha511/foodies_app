@@ -1,5 +1,6 @@
 package com.example.class3demo2;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -20,7 +21,6 @@ import com.example.class3demo2.model.Recipe;
 import com.squareup.picasso.Picasso;
 
 public class RecipeFragment extends Fragment {
-    TextView titleTv;
     String title;
     String ingredients;
     String instructions;
@@ -31,10 +31,6 @@ public class RecipeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);  //save state
-        Bundle bundle = getArguments();
-        if (bundle != null){
-            this.title = bundle.getString("TITLE");
-        }
     }
 
     @Override
@@ -54,8 +50,10 @@ public class RecipeFragment extends Fragment {
         if (instructions != null){
             binding.InstructionsTv.setText(instructions);
         }
-        if (avatarImg != null){
+        if (avatarImg != ""){
             Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
+        }else{
+            binding.avatarImg.setImageResource(R.drawable.photorecipe);
         }
 
         //View button = view.findViewById(R.id.recipe_back_btn);

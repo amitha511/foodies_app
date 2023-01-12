@@ -37,7 +37,6 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
     List<Recipe> data;
     RecipeListRowBinding binding;
 
-
     //create 1 student row
     public RecipeViewHolder(@NonNull View itemView, RecipeRecyclerAdapter.OnItemClickListener listener, List<Recipe> data) {
         super(itemView);
@@ -53,7 +52,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
                 int pos = (int) cb.getTag();
                 Recipe re = data.get(pos);
                 re.cb = cb.isChecked();
-                Model.instance().UpdateRecipe(re, () -> {
+                Model.instance().UpdateRecipe(re, (unused) -> {
                 });
             }
         });
@@ -72,12 +71,11 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
         idTv.setText(re.id);
         cb.setChecked(re.cb);
         cb.setTag(pos);
-        String path = re.avatarUrl;
-        Log.d("path",path);
-        if(path == null)
-            path = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=768,574";
-
-        Picasso.get().load(path).error(R.drawable.errorpizza).into(img);
+        if(re.getAvatarUrl() != "")
+            Picasso.get().load(re.getAvatarUrl()).into(img);
+        else{
+            img.setImageResource(R.drawable.photorecipe);
+        }
         // if photo up from gallery you see - error pizza because the permission of google.
         //if you see sakshoka photo  - is default photo , user don't entry photo
 
