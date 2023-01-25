@@ -19,16 +19,21 @@ public class Recipe {
     public Boolean cb=false;
     public String instructions="";
     public String ingredients="";
+    public String author = "";
+
 
     public Recipe(){}
 
-    public Recipe(String name, String id, String avatarUrl, Boolean cb,String instructions,String ingredients) {
+
+
+    public Recipe(String name, String id, String avatarUrl, Boolean cb, String instructions, String ingredients, String author) {
         this.name = name;
         this.id = id;
         this.avatarUrl = avatarUrl;
         this.cb = cb;
         this.ingredients=ingredients;
         this.instructions=instructions;
+        this.author = author;
     }
 
     public static Recipe fromJson(Map<String,Object> json){
@@ -37,8 +42,10 @@ public class Recipe {
         String avatarUrl = (String)json.get("avatarUrl");
         String instructions =(String) json.get("instructions");
         String ingredients = (String) json.get("ingredients");
+        String author = (String) json.get("author");
         Boolean cb = (Boolean)json.get("cb");
-        Recipe re= new Recipe(name,id,avatarUrl,cb,instructions,ingredients);
+
+        Recipe re = new Recipe(name, id, avatarUrl, cb, instructions, ingredients, author);
 
         return re;
     }
@@ -50,6 +57,7 @@ public class Recipe {
         json.put("avatarUrl", getAvatarUrl());
         json.put("instructions", getInstructions());
         json.put("ingredients",getIngredients());
+        json.put("author",getAuthor());
         json.put("cb", getCb());
         return json;
     }
@@ -80,7 +88,6 @@ public class Recipe {
         this.name = name;
     }
 
-
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
     }
@@ -105,4 +112,14 @@ public class Recipe {
     public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
     }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+
 }

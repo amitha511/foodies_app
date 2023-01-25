@@ -1,11 +1,9 @@
 package com.example.class3demo2;
 
 
-import static android.app.Activity.RESULT_OK;
 
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -13,7 +11,6 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +19,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
@@ -37,12 +35,18 @@ import android.view.ViewGroup;
 import com.example.class3demo2.databinding.FragmentAddRecipeBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.HashMap;
 
 public class AddRecipeFragment extends Fragment {
+    CurrentUserViewModel currentUser;
     FragmentAddRecipeBinding binding;
     Boolean isAvatarSelected = false;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryAppLauncher;
+    String email;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +100,9 @@ public class AddRecipeFragment extends Fragment {
 
         binding = FragmentAddRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
-
+        Model.instance().getCurrentUser(user -> {
+            email = user.getEmail();
+        });
         binding.saveBtn.setOnClickListener(view1 -> {
           saveRecipe(view1);
         });
@@ -121,25 +127,37 @@ public class AddRecipeFragment extends Fragment {
         String instructions = binding.instructionsEt.getText().toString();
         String ingredients = binding.ingredientsEt.getText().toString();
         String id = name;
-        Recipe re = new Recipe(name,id,"",false,instructions,ingredients);
+        if(name.isEmpty()){
+            TextInputEditText input = binding.nameEt;
+            input.setError("This field cannot be empty");
+        }
+        else {
 
-        if(isAvatarSelected){
-            binding.avatarImg.setDrawingCacheEnabled(true);
-            binding.avatarImg.buildDrawingCache();
-            Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
-            Model.instance().uploadImage(id,bitmap,url->{
-                if(url != null){
-                    re.setAvatarUrl(url);
-                }
-                Model.instance().addRecipe(re,(unused)->{
+            Recipe re = new Recipe(name, id, "", false, instructions, ingredients, email);
+            if (isAvatarSelected) {
+                binding.avatarImg.setDrawingCacheEnabled(true);
+                binding.avatarImg.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+                Model.instance().uploadImage(id, bitmap, url -> {
+                    if (url != null) {
+                        re.setAvatarUrl(url);
+                    }
+                    Model.instance().addRecipe(re, (unused) -> {
+                        Navigation.findNavController(view1).popBackStack();
+                    });
+                });
+            } else {
+                Model.instance().addRecipe(re, (unused) -> {
                     Navigation.findNavController(view1).popBackStack();
                 });
-            });
-        }else {
-            Model.instance().addRecipe(re, (unused) -> {
-                Navigation.findNavController(view1).popBackStack();
-            });
+            }
         }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        currentUser = new ViewModelProvider(this).get(CurrentUserViewModel.class);
     }
 
 

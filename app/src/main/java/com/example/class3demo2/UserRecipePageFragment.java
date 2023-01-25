@@ -15,6 +15,9 @@ import android.widget.TextView;
 import com.example.class3demo2.databinding.FragmentUserRecipePageBinding;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UserRecipePageFragment extends RecipeFragment {
 
     FragmentUserRecipePageBinding binding;

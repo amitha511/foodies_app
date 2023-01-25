@@ -5,49 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8sp"
-        android:text="Settings"
-        android:textSize="21sp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.32" />
-
     <ScrollView
-        android:id="@+id/scrollView3"
-        android:layout_width="413dp"
-        android:layout_height="623dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/editProfile"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
-                android:background="#F0ECEC"
-                android:backgroundTint="#F0ECEC"
-                android:text="Edit Profile" />
+                android:layout_height="match_parent"
+                android:layout_gravity="top"
+                android:layout_marginTop="30sp"
+                android:orientation="vertical">
 
+                <Button
+                    android:id="@+id/editProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="60sp"
+                    android:background="#edebe4"
+                    android:backgroundTint="@color/button"
+                    android:text="Edit Profile"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"
+                    app:iconTint="#B8B0B0" />
 
+                <Button
+                    android:id="@+id/logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60sp"
+                    android:layout_marginTop="8sp"
+                    android:background="#edebe4"
+                    android:backgroundTint="@color/button"
+                    android:text="Log Out"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"
+                    app:iconTint="#C3C1C1" />
+            </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <Button
-                android:id="@+id/Logout"
-                android:layout_width="match_parent"
-                android:layout_height="76dp"
-                android:text="Log Out" />
-        </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

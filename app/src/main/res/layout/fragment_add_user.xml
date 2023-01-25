@@ -76,7 +76,7 @@
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="60sp"
                 android:layout_marginLeft="8sp"
                 android:layout_marginRight="8sp"
                 android:orientation="horizontal">
@@ -90,7 +90,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/first_name"
                         android:layout_width="189dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:required="true"
                         android:hint="First Name" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -106,8 +107,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/last_name"
                         android:layout_width="match_parent"
-                        android:layout_height="45dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="4sp"
+                        android:required="true"
                         android:hint="Last Name" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,6 +126,7 @@
                     android:layout_width="399dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="16sp"
+                    android:required="true"
                     android:hint="Email" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,10 +137,12 @@
                 android:layout_marginRight="8sp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password"
+                    android:id="@+id/password1"
                     android:layout_width="399dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="16sp"
+                    android:inputType="textPassword"
+                    android:required="true"
                     android:hint="Password" />
 
             </com.google.android.material.textfield.TextInputLayout>

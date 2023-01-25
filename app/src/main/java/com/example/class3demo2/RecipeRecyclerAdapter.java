@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +53,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
                 int pos = (int) cb.getTag();
                 Recipe re = data.get(pos);
                 re.cb = cb.isChecked();
-                Model.instance().UpdateRecipe(re, (unused) -> {
-                });
+                Model.instance().saveLike(re.name);
             }
         });
         itemView.setOnClickListener(new View.OnClickListener() {  //click on student in the list
@@ -69,17 +69,28 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
     public void bind(Recipe re, int pos) {
         nameTv.setText(re.name);
         idTv.setText(re.id);
-        cb.setChecked(re.cb);
+        Model.instance().getAllLikes(likes->{
+            if(likes.contains(re.name)){
+                cb.setChecked(true);
+
+            }else{
+                cb.setChecked(false);
+            }
+        });
+
+        Log.d("bol",re.getCb().toString());
         cb.setTag(pos);
         if(re.getAvatarUrl() != "")
             Picasso.get().load(re.getAvatarUrl()).into(img);
         else{
             img.setImageResource(R.drawable.photorecipe);
         }
+
         // if photo up from gallery you see - error pizza because the permission of google.
         //if you see sakshoka photo  - is default photo , user don't entry photo
 
     }
+
 }
 
 

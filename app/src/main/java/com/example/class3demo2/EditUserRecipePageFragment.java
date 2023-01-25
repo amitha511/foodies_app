@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -29,7 +30,11 @@ import com.example.class3demo2.databinding.FragmentAddRecipeBinding;
 import com.example.class3demo2.databinding.FragmentEditUserRecipePageBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
+import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class EditUserRecipePageFragment extends AddRecipeFragment {
@@ -45,6 +50,9 @@ public class EditUserRecipePageFragment extends AddRecipeFragment {
         binding = FragmentAddRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
         getElement();
+        Model.instance().getCurrentUser(user -> {
+            email = user.getEmail();
+        });
 
         binding.saveBtn.setOnClickListener(view1 -> {
             saveRecipe(view1);
@@ -86,6 +94,36 @@ public class EditUserRecipePageFragment extends AddRecipeFragment {
             Picasso.get().load(imageString).error(R.drawable.errorpizza).into(binding.avatarImg);
         }else
             binding.avatarImg.setImageResource(R.drawable.photorecipe);
+
+        binding.nameEt.setEnabled(false);
+        binding.styleNameEt.setStartIconDrawable(null);
     }
 
+    @Override
+    public void saveRecipe(View view1) {
+        String name = binding.nameEt.getText().toString();
+        String instructions = binding.instructionsEt.getText().toString();
+        String ingredients = binding.ingredientsEt.getText().toString();
+        String id = name;
+
+            Recipe re = new Recipe(name, id, "", false, instructions, ingredients, email);
+            if (isAvatarSelected || imageString != "") {
+                binding.avatarImg.setDrawingCacheEnabled(true);
+                binding.avatarImg.buildDrawingCache();
+                Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+                Model.instance().uploadImage(id, bitmap, url -> {
+                    if (url != null) {
+                        re.setAvatarUrl(url);
+                    }
+                    Model.instance().addRecipe(re, (unused) -> {
+                        Navigation.findNavController(view1).popBackStack();
+                    });
+                });
+            } else {
+                Model.instance().addRecipe(re, (unused) -> {
+                    Navigation.findNavController(view1).popBackStack();
+                });
+            }
+
+    }
 }

@@ -20,13 +20,19 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 public class FirebaseModel {
@@ -67,7 +73,6 @@ public class FirebaseModel {
     }
 
     public void addRecipe(Recipe re, Model.Listener<Void> listener) {
-
 
         db.collection("recipes").document(re.getId()).set(re.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -113,6 +118,15 @@ public class FirebaseModel {
         }
     }
 
+    public void updateUser(User us , Model.Listener<Boolean> listener){
+        db.collection("users").document(us.getEmail()).set(us.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                listener.onComplete(null);
+            }
+        });
+    }
+
     public void isSignedIn(Model.Listener<Boolean> listener){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -120,6 +134,7 @@ public class FirebaseModel {
         } else {
             listener.onComplete(false);
         }
+
     }
 
 
@@ -131,8 +146,9 @@ public class FirebaseModel {
                 User us = null;
                 if(task.isSuccessful()){
                     DocumentSnapshot json = task.getResult();
-                    us = User.fromJson(json.getData());
-
+                    if(json !=null) {
+                        us = User.fromJson(json.getData());
+                    }
                 }
                 listener.onComplete(us);
             }
@@ -170,6 +186,57 @@ public class FirebaseModel {
             }
         });
     }
+
+
+    public void saveLike(String namePost){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("likes").document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot json = task.getResult();
+                List<String> posts = new ArrayList<>();
+                posts.add("0");
+                Map<String ,List<String>> p = new HashMap<>();
+                p.put("post",posts);
+
+                if(!json.contains("post")){
+                    db.collection("likes").document(user.getEmail()).set(p);
+                }else {
+                    posts.addAll((List<String>) json.get("post"));
+                    if (!posts.contains(namePost)) {
+                        posts.add(namePost);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("post", posts);
+                        db.collection("likes").document(user.getEmail()).set(map);
+
+                    } else {
+                        posts.remove(namePost);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("post", posts);
+                        db.collection("likes").document(user.getEmail()).set(map);
+                    }
+                }
+            }
+        });
+    }
+
+    public void getLike(Model.Listener<List<String>> listener){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("likes").document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot json = task.getResult();
+                List<String> posts = new LinkedList<>();
+                if(json.contains("post")) {
+                    posts.addAll((List<String>) json.get("post"));
+                }
+                listener.onComplete(posts);
+
+            }
+        });
+    }
+
+
 
 
 }

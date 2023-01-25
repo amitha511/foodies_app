@@ -9,55 +9,57 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.class3demo2.databinding.FragmentAddUserBinding;
 import com.example.class3demo2.model.Model;
-import com.example.class3demo2.model.Recipe;
 import com.example.class3demo2.model.User;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class RegisterUserFragment extends Fragment {
 
     FragmentAddUserBinding binding;
-    String imageString = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=768,574";
     Boolean isAvatarSelected = false;
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryAppLauncher;
-
+    String firstName ;
+    String lastName;
+    String email;
+    String password;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+
+            cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(),
+                    new ActivityResultCallback<Bitmap>() {
+                        @Override
+                        public void onActivityResult(Bitmap result) {
+                            if (result != null) {
+                                binding.avatarImg2.setImageBitmap(result);
+                                isAvatarSelected = true;
+                            }
+                        }
+                    });
+
+            galleryAppLauncher = registerForActivityResult(new
+                    ActivityResultContracts.GetContent(), new
+                    ActivityResultCallback<Uri>() {
+                        @Override
+                        public void onActivityResult(Uri result) {
+                            if (result != null) {
+                                binding.avatarImg2.setImageURI(result);
+                                isAvatarSelected = true;
+                            }
+                        }
+                    });
         }
 
-        cameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicturePreview(),
-                new ActivityResultCallback<Bitmap>() {
-                    @Override
-                    public void onActivityResult(Bitmap result) {
-                        if (result != null) {
-                            binding.avatarImg2.setImageBitmap(result);
-                            isAvatarSelected = true;
-                        }
-                    }
-                });
-
-        galleryAppLauncher = registerForActivityResult(new
-                ActivityResultContracts.GetContent(), new
-                ActivityResultCallback<Uri>() {
-                    @Override
-                    public void onActivityResult(Uri result) {
-                        if (result != null) {
-                            binding.avatarImg2.setImageURI(result);
-                            isAvatarSelected = true;
-                        }
-                    }
-                });
     }
 
     @Override
@@ -66,45 +68,44 @@ public class RegisterUserFragment extends Fragment {
         binding = FragmentAddUserBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
+
         binding.saveBtnUser.setOnClickListener(view1 -> {
-            String firstName = binding.firstName.getText().toString();
-            String lastName = binding.lastName.getText().toString();
-            String email = binding.email.getText().toString();
-            String password = binding.password.getText().toString();
+             firstName = binding.firstName.getText().toString();
+             lastName = binding.lastName.getText().toString();
+             email = binding.email.getText().toString();
+             password = binding.password1.getText().toString();
+            if(!checkInput()){
 
-            Model.instance().createUserWithEmailAndPassword(email, password, status->{
-                if(status){
-                    //Toast.makeText(getActivity(), "successful", Toast.LENGTH_SHORT).show();
-                    User us = new User(firstName,lastName,email,"");
+                Model.instance().createUserWithEmailAndPassword(email, password, status->{
+                    if(status){
+                        User us = new User(firstName,lastName,email,"");
 
-                    if(isAvatarSelected){
-                        binding.avatarImg2.setDrawingCacheEnabled(true);
-                        binding.avatarImg2.buildDrawingCache();
-                        Bitmap bitmap = ((BitmapDrawable) binding.avatarImg2.getDrawable()).getBitmap();
-                        Model.instance().uploadImage(email,bitmap,url->{
-                            if(url != null){
-                                us.setAvatarUrl(url);
-                            }
-                            Model.instance().addUser(us,(unused)->{
-                                Navigation.findNavController(view).navigate(RegisterUserFragmentDirections.actionRegisterUserFragmentToRecipesListFragment());
+                        if(isAvatarSelected){
+                            binding.avatarImg2.setDrawingCacheEnabled(true);
+                            binding.avatarImg2.buildDrawingCache();
+                            Bitmap bitmap = ((BitmapDrawable) binding.avatarImg2.getDrawable()).getBitmap();
+                            Model.instance().uploadImage(email,bitmap,url->{
+                                if(url != null){
+                                    us.setAvatarUrl(url);
+                                }
+                                Model.instance().addUser(us,(unused)->{
+                                    homePage(binding.getRoot());
+                                });
                             });
-                        });
-                    }else {
-                        Model.instance().addUser(us, (unused) -> {
-                            Navigation.findNavController(view).navigate(RegisterUserFragmentDirections.actionRegisterUserFragmentToRecipesListFragment());
-                        });
+                        }
+                        else {
+                            Model.instance().addUser(us, (unused) -> {
+                                homePage(binding.getRoot());
+                            });
+                        }
                     }
-                }
-
-                else{
-                    Navigation.findNavController(view1).popBackStack();
-
-                }
-                   // Toast.makeText(getActivity(), "error", Toast.LENGTH_SHORT).show();
-            });
-
-
+                    else{
+//                        homePage(binding.getRoot());
+                    }
+                });
+            }
         });
+
 
         binding.camerabutton.setOnClickListener(view1->{
             cameraLauncher.launch(null);
@@ -114,8 +115,48 @@ public class RegisterUserFragment extends Fragment {
             galleryAppLauncher.launch("image/*");
         });
 
-
         return view;
 
+    }
+
+
+    public boolean checkInput(){
+        Boolean bool =false;
+        if(email.isEmpty()) {
+            TextInputEditText input = binding.email;
+            input.setError("This field cannot be empty");
+            bool=true;
+        }
+        if(password.isEmpty()) {
+            TextInputEditText input = binding.password1;
+            input.setError("This field cannot be empty");
+            bool=true;
+
+        }
+        if(firstName.isEmpty()) {
+            TextInputEditText input = binding.firstName;
+            input.setError("This field cannot be empty");
+            bool=true;
+
+        }
+        if(lastName.isEmpty()) {
+            TextInputEditText input = binding.lastName;
+            input.setError("This field cannot be empty");
+            bool=true;
+
+        }
+
+        return bool;
+    }
+
+
+
+    public void homePage(View view){
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_navhost, RecipesListFragment.class, null)
+                .setReorderingAllowed(true)
+                .addToBackStack("name") // name can be null
+                .commit();
     }
 }

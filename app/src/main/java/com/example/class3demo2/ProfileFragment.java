@@ -15,23 +15,30 @@ import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class ProfileFragment extends RecipesListFragment {
     FragmentMyProfileBinding binding;
+    String email;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = FragmentMyProfileBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        Model.instance().getCurrentUser(user->{
-            binding.email.setText(user.email);
-            binding.firstName.setText(user.firstName);
-            binding.lastName.setText(user.lastName);
-            Picasso.get().load(user.avatarUrl).error(R.drawable.errorpizza).into(binding.avatarImg3);
+
+        Model.instance().getCurrentUser(currentUser-> {
+//            currentUser.setUser(user);
+            email = currentUser.getEmail();
+            binding.email.setText(currentUser.email);
+            binding.firstName.setText(currentUser.firstName);
+            binding.lastName.setText(currentUser.lastName);
+            if(currentUser.avatarUrl !="")
+                Picasso.get().load(currentUser.avatarUrl).error(R.drawable.errorpizza).into(binding.avatarImg3);
         });
 
         binding.recyclerView.setHasFixedSize(true);
@@ -47,16 +54,22 @@ public class ProfileFragment extends RecipesListFragment {
             Navigation.findNavController(view).navigate(action);
         }
         });
-        return view;
+
+
+         return view;
     }
 
     @Override
     void reloadData(){
+
         binding.progressBar3.setVisibility(View.VISIBLE);
+
+
         Model.instance().getAllRecipes((reList)->{
             viewModel.getData().removeAll(viewModel.getData());
             for(Recipe re : reList){
-                if(re.name.equals("hi"))
+                Log.d("email",email +"re.au:"+ re.author );
+                if(re.author.equals(email))
                     viewModel.getData().add(re);
             }
             adapter.setData(viewModel.getData());

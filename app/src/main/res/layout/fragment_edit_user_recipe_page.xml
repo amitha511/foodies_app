@@ -40,18 +40,18 @@
                     android:textSize="25sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="238dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    app:startIconDrawable="@drawable/ic_baseline_mode_edit_24">
+                    android:layout_marginEnd="10dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/nameEt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_width="227dp"
+                        android:layout_height="match_parent"
+                        android:enabled="false"
+                        android:hint="name" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
@@ -130,10 +130,6 @@
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="250dp"
-                android:layout_height="30sp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="180sp"
@@ -178,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110sp"
                     android:layout_weight="1"
-                    android:backgroundTint="#F2BF67"
+                    android:backgroundTint="@color/button"
                     android:text="Save" />
 
                 <Button
@@ -187,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110sp"
                     android:layout_weight="1"
-                    android:backgroundTint="#F2BF67"
+                    android:backgroundTint="@color/button"
                     android:text="@android:string/cancel" />
             </LinearLayout>
 

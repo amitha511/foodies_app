@@ -53,12 +53,16 @@ public class SaveFragment extends RecipesListFragment {
         binding.progressBar2.setVisibility(View.VISIBLE);
         Model.instance().getAllRecipes((reList)->{
             viewModel.getData().removeAll(viewModel.getData());
-            for(Recipe re : reList){
-                if(re.cb == true)
-                    viewModel.getData().add(re);
-            }
-            adapter.setData(viewModel.getData());
-            binding.progressBar2.setVisibility(View.GONE);
+
+            Model.instance().getAllLikes(likes->{
+                for(Recipe re : reList){
+                    if(likes.contains(re.name))
+                        viewModel.getData().add(re);
+                }
+                adapter.setData(viewModel.getData());
+            });
         });
+        binding.progressBar2.setVisibility(View.GONE);
+
     }
 }

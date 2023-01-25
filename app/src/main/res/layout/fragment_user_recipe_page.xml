@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="16sp"
                     android:layout_weight="1"
-                    android:backgroundTint="#F2BF67"
+                    android:backgroundTint="@color/button"
                     android:text="Edit"
                     android:textAllCaps="false" />
 
@@ -175,7 +175,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16sp"
                     android:layout_weight="1"
-                    android:backgroundTint="#F2BF67"
+                    android:backgroundTint="@color/button"
                     android:text="Translate"
                     android:textAllCaps="false" />
             </LinearLayout>
@@ -197,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="110sp"
                 android:layout_weight="1"
-                android:backgroundTint="#F2BF67"
+                android:backgroundTint="@color/button"
                 android:text="Back" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -40,6 +40,7 @@
                     android:textSize="25sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/styleNameEt"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="238dp"
                     android:layout_height="match_parent"
@@ -52,6 +53,7 @@
                         android:id="@+id/nameEt"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:required="true"
                         android:hint="Name Recipe" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,7 +179,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110sp"
                     android:layout_weight="1"
-                    android:backgroundTint="#F2BF67"
+                    android:backgroundTint="@color/button"
                     android:text="Save" />
 
                 <Button
@@ -186,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="110sp"
                     android:layout_weight="1"
-                    android:backgroundTint="#F2BF67"
+                    android:backgroundTint="@color/button"
                     android:text="@android:string/cancel" />
             </LinearLayout>
 

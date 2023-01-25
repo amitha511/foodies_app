@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.class3demo2.model.Model;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -38,11 +39,20 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
     private static final int REQUEST_SELECT_PICTURE = 1;
     NavController navController;
+    NavHostFragment navHostFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Model.instance().isSignedIn(s-> {
+            if(s == Boolean.FALSE){
+                Intent i = new Intent(MainActivity.this, LoginPage.class);
+                startActivity(i);
+                finish();
+            }
+        });
         //menu bar up and down :
 
         //add menu bar:
@@ -57,10 +67,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navView = findViewById(R.id.main_bottomNavigationView);
         NavigationUI.setupWithNavController(navView,navController);//(down)
         //By calling this method, the title in the *Toolbar* will automatically be updated when the destination changes
-
-
-
-
     }
 
     int fragmentMenuId = 0;

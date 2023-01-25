@@ -55,12 +55,31 @@ public class RecipeFragment extends Fragment {
         }else{
             binding.avatarImg.setImageResource(R.drawable.photorecipe);
         }
+        Model.instance().getAllLikes(likes->{
+            if(likes.contains(title))
+                binding.like.setChecked(true);
+            else{
+                binding.like.setChecked(false);
+            }
+        });
 
         //View button = view.findViewById(R.id.recipe_back_btn);
         binding.backBtn.setOnClickListener((view1)->{
             Navigation.findNavController(view1).popBackStack();
         });
+
+        binding.like.setOnClickListener(view1->{
+            Model.instance().saveLike(title);
+        });
+
+        binding.translateBtn.setOnClickListener(view1->{
+            Model.instance().restApi("sky", trans->{
+                binding.InstructionsTv.setText(trans.toString());
+
+            });
+        });
         return view;
+
     }
 
     public void getElement() {

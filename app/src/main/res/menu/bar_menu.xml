@@ -18,6 +18,7 @@
         android:id="@+id/Profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checkable="false"
         android:icon="@drawable/ic_baseline_person_24"
         android:title="Profile" />
 </menu>
