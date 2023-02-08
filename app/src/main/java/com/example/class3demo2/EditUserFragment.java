@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.class3demo2.databinding.FragmentAddUserBinding;
 import com.example.class3demo2.databinding.FragmentEditUserBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.User;

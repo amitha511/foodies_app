@@ -80,11 +80,12 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
 
         Log.d("bol",re.getCb().toString());
         cb.setTag(pos);
-        if(re.getAvatarUrl() != "")
-            Picasso.get().load(re.getAvatarUrl()).into(img);
-        else{
+        Log.d("avatar",re.getAvatarUrl().toString());
+        if(re.getAvatarUrl() == "" || re.getAvatarUrl().isEmpty())
             img.setImageResource(R.drawable.photorecipe);
-        }
+        else
+            Picasso.get().load(re.getAvatarUrl()).error(R.drawable.photorecipe).into(img);
+
 
         // if photo up from gallery you see - error pizza because the permission of google.
         //if you see sakshoka photo  - is default photo , user don't entry photo
@@ -132,6 +133,8 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecipeViewHolder
 
     @Override
     public int getItemCount() {
+        if(data == null)
+            return 0;
         return data.size();
     }
 

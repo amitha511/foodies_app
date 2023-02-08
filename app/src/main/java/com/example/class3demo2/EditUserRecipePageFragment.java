@@ -90,10 +90,12 @@ public class EditUserRecipePageFragment extends AddRecipeFragment {
         if (instructions != null){
             binding.instructionsEt.setText(instructions);
         }
-        if (imageString != ""){
-            Picasso.get().load(imageString).error(R.drawable.errorpizza).into(binding.avatarImg);
-        }else
+        if (imageString.isEmpty() || imageString ==""){
             binding.avatarImg.setImageResource(R.drawable.photorecipe);
+
+        }else{
+            Picasso.get().load(imageString).error(R.drawable.errorpizza).into(binding.avatarImg);
+        }
 
         binding.nameEt.setEnabled(false);
         binding.styleNameEt.setStartIconDrawable(null);

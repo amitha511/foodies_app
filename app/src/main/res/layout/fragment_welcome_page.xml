@@ -28,6 +28,7 @@
                 android:layout_width="250dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="8sp"
                 app:srcCompat="@drawable/logo_465x320" />
 
 <!--            <Space-->
@@ -48,7 +49,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15sp" />
+                android:layout_height="5sp" />
 
             <TextView
                 android:id="@+id/welcome"
@@ -62,13 +63,20 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15sp" />
+                android:layout_height="10sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/wrong1"
+                    android:layout_width="295dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="#FF0000" />
 
                 <TextView
                     android:id="@+id/email"
@@ -163,7 +171,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="25sp" />
+                android:layout_height="15sp" />
 
             <TextView
                 android:id="@+id/textView4"

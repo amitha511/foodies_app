@@ -19,6 +19,8 @@ import com.example.class3demo2.databinding.FragmentSaveRecipeBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -37,13 +39,13 @@ public class SaveFragment extends RecipesListFragment {
         adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(int pos) {
-            Log.d("TAG", "Row was clicked " + pos);
-            Recipe re = viewModel.getData().get(pos);
-            SaveFragmentDirections.ActionLikesFragmentToRecipeFragment action = SaveFragmentDirections.actionLikesFragmentToRecipeFragment(re.name,re.ingredients,re.instructions,re.avatarUrl);
-            Navigation.findNavController(view).navigate(action);
-        }
+            @Override
+            public void onItemClick(int pos) {
+                Log.d("TAG", "Row was clicked " + pos);
+                Recipe re = viewModel.getData().get(pos);
+                SaveFragmentDirections.ActionLikesFragmentToRecipeFragment action = SaveFragmentDirections.actionLikesFragmentToRecipeFragment(re.name,re.ingredients,re.instructions,re.avatarUrl);
+                Navigation.findNavController(view).navigate(action);
+            }
         });
         return view;
     }
@@ -59,6 +61,7 @@ public class SaveFragment extends RecipesListFragment {
                     if(likes.contains(re.name))
                         viewModel.getData().add(re);
                 }
+                Collections.sort(viewModel.getData(), Comparator.comparing(Recipe::getName));
                 adapter.setData(viewModel.getData());
             });
         });

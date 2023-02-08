@@ -50,11 +50,13 @@ public class RecipeFragment extends Fragment {
         if (instructions != null){
             binding.InstructionsTv.setText(instructions);
         }
-        if (avatarImg != ""){
-            Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
-        }else{
+        if (avatarImg.isEmpty() || avatarImg ==""){
             binding.avatarImg.setImageResource(R.drawable.photorecipe);
+
+        }else{
+            Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
         }
+
         Model.instance().getAllLikes(likes->{
             if(likes.contains(title))
                 binding.like.setChecked(true);
@@ -73,8 +75,8 @@ public class RecipeFragment extends Fragment {
         });
 
         binding.translateBtn.setOnClickListener(view1->{
-            Model.instance().restApi("sky", trans->{
-                binding.InstructionsTv.setText(trans.toString());
+            Model.instance().restApi(binding.recipeTitleTv.getText().toString(), trans->{
+                binding.recipeTitleTv.setText(trans.toString());
 
             });
         });

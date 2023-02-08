@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
@@ -22,6 +23,8 @@ import com.example.class3demo2.databinding.FragmentRecipeListBinding;
 import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,17 +50,31 @@ public class RecipesListFragment extends Fragment {
 
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getData());
+        adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getLiveData().getValue());
         binding.recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
-                Recipe re = viewModel.getData().get(pos);
+                Recipe re = viewModel.getLiveData().getValue().get(pos);
                 RecipesListFragmentDirections.ActionRecipesListFragmentToRecipeFragment action = RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(re.getName(),re.getIngredients(),re.getInstructions(),re.getAvatarUrl());
                 Navigation.findNavController(view).navigate(action);
             }
+        });
+        binding.progressBar.setVisibility(View.GONE);
+
+        Model.instance().EventRecipesListLoadingState.observe(getViewLifecycleOwner(),status->{
+            binding.swipeRefresh.setRefreshing(status == Model.LoadingState.LOADING);
+        });
+
+        viewModel.getLiveData().observe( getViewLifecycleOwner(),list->{
+            Collections.sort(list, Comparator.comparing(Recipe::getName));
+            adapter.setData(list);
+        });
+
+        binding.swipeRefresh.setOnRefreshListener(()->{
+            reloadData();
         });
 
         return view;
@@ -75,34 +92,18 @@ public class RecipesListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         reloadData();
-  //list of student
+        //list of student
     }
 
     void reloadData(){
-        binding.progressBar.setVisibility(View.VISIBLE);
-        Model.instance().getAllRecipes((reList) -> {
+       // binding.progressBar.setVisibility(View.VISIBLE);
 
-                viewModel.setData(reList);
-                adapter.setData(viewModel.getData());
-                binding.progressBar.setVisibility(View.GONE);
+        Model.instance().refreshAllRecipes();
 
-//            binding.search.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    if(hasFocus) {
-//                        String search = binding.search.getQuery().toString();
-//                        viewModel.getData().removeAll(viewModel.getData());
-//                        for (Recipe re : reList) {
-//                            if (re.name.contains(v.toString()))
-//                                viewModel.getData().add(re);
-//                        }
-//                        adapter.setData(viewModel.getData());
+//        Model.instance().getAllRecipes((reList) -> {
+//            viewModel.setData(reList);
+//            adapter.setData(viewModel.getData());
 //
-//                        Log.d("l", search + v.toString());
-//                    }
-//                }
-//
-//            });
-        });
+//        });
     }
 }

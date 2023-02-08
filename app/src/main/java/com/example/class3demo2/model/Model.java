@@ -1,21 +1,20 @@
 package com.example.class3demo2.model;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -24,10 +23,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
 
 public class Model {
 
@@ -35,6 +32,8 @@ public class Model {
     private Executor executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
     private FirebaseModel firebaseModel = new FirebaseModel();
+    AppLocalDbRepository localDb = AppLocalDb.getAppDb();
+
 
     public static Model instance() {
         return _instance;
@@ -43,14 +42,13 @@ public class Model {
     private Model() {
     }
 
-    AppLocalDbRepository localDb = AppLocalDb.getAppDb();
-
     public interface Listener<T> {
         void onComplete( T data);
     }
 
+
     public void getAllRecipes(Listener<List<Recipe>> callback) {
-        firebaseModel.getAllRecipes(callback);
+         firebaseModel.getAllRecipes(callback);
 //        executor.execute(()->{
 //            List<Recipe> data = localDb.recipeDao().getAll();
 //            mainHandler.post(()->{
@@ -58,11 +56,58 @@ public class Model {
 //            });
 //        });
     }
+                //******************** for cache*********************
+    public enum LoadingState{
+        LOADING,
+        NOT_LOADING
+    }
+
+    final public MutableLiveData<LoadingState> EventRecipesListLoadingState = new MutableLiveData<LoadingState>(LoadingState.NOT_LOADING);
+//
+//
+    private LiveData<List<Recipe>> studentList;
+    public LiveData<List<Recipe>> getAllRecipesNew() { // for cache
+        if(studentList == null){
+            studentList = localDb.recipeDao().getAll();
+            refreshAllRecipes();
+
+        }
+        return studentList;
+    }
+    public void refreshAllRecipes(){
+        EventRecipesListLoadingState.setValue(LoadingState.LOADING);
+        // get local last update
+        Long localLastUpdate = Recipe.getLocalLastUpdate();
+
+        // get all updated recorde from firebase since local last update
+        firebaseModel.getAllRecipesSince(localLastUpdate,list->{
+            executor.execute(()->{
+                Log.d("TAG", " firebase return : " + list.size());
+                Long time = localLastUpdate;
+                for(Recipe re:list){
+                    // insert new records into ROOM
+                    localDb.recipeDao().insertAll(re);
+                    if (time < re.getLastUpdated()){
+                        time = re.getLastUpdated();
+                    }
+                }
+                try {
+                    Thread.sleep(0000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                // update local last update
+                Recipe.setLocalLastUpdate(time);
+                EventRecipesListLoadingState.postValue(LoadingState.NOT_LOADING);
+            });
+        });
+    }
 
 
 
     public void addRecipe(Recipe re, Listener<Void> listener) {
         firebaseModel.addRecipe(re, listener);
+        //refreshAllRecipes();       ********************** for cache******
 //        executor.execute(()->{
 //            localDb.recipeDao().insertAll(re);
 //            mainHandler.post(()->{

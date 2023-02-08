@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -72,7 +73,29 @@ public class FirebaseModel {
         });
     }
 
-    public void addRecipe(Recipe re, Model.Listener<Void> listener) {
+// for cache
+    public void getAllRecipesSince(Long since, Model.Listener<List<Recipe>> callback){
+        db.collection("recipes")
+                .whereGreaterThanOrEqualTo(Recipe.LAST_UPDATED, new Timestamp(since,0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<Recipe> list = new LinkedList<>();
+                        if (task.isSuccessful()){
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json: jsonsList){
+                                Recipe re = Recipe.fromJson(json.getData());
+                                list.add(re);
+                            }
+                        }
+                        callback.onComplete(list);
+                    }
+                });
+    }
+
+
+    public void addRecipe(Recipe re, Model.Listener<Void> listener) { // add recipe to firebase
 
         db.collection("recipes").document(re.getId()).set(re.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -84,7 +107,7 @@ public class FirebaseModel {
 
     }
 
-    public void addUser(User us, Model.Listener<Void> listener) {
+    public void addUser(User us, Model.Listener<Void> listener) {  //add user to firebase
         db.collection("users").document(us.getEmail()).set(us.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -195,13 +218,14 @@ public class FirebaseModel {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot json = task.getResult();
                 List<String> posts = new ArrayList<>();
-                posts.add("0");
-                Map<String ,List<String>> p = new HashMap<>();
-                p.put("post",posts);
 
                 if(!json.contains("post")){
+                    posts.add(namePost);
+                    Map<String ,List<String>> p = new HashMap<>();
+                    p.put("post",posts);
                     db.collection("likes").document(user.getEmail()).set(p);
-                }else {
+                }
+                else {
                     posts.addAll((List<String>) json.get("post"));
                     if (!posts.contains(namePost)) {
                         posts.add(namePost);

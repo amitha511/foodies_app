@@ -1,9 +1,16 @@
 package com.example.class3demo2.model;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.example.class3demo2.MyApplication;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,11 +27,9 @@ public class Recipe {
     public String instructions="";
     public String ingredients="";
     public String author = "";
-
+    public Long lastUpdated; // need to add in firebase
 
     public Recipe(){}
-
-
 
     public Recipe(String name, String id, String avatarUrl, Boolean cb, String instructions, String ingredients, String author) {
         this.name = name;
@@ -36,6 +41,9 @@ public class Recipe {
         this.author = author;
     }
 
+    static final String LAST_UPDATED = "lastUpdated";
+    static final String LOCAL_LAST_UPDATED = "recipes_local_last_update";
+
     public static Recipe fromJson(Map<String,Object> json){
         String id = (String) json.get("id");
         String name = (String) json.get("name");
@@ -44,11 +52,30 @@ public class Recipe {
         String ingredients = (String) json.get("ingredients");
         String author = (String) json.get("author");
         Boolean cb = (Boolean)json.get("cb");
-
         Recipe re = new Recipe(name, id, avatarUrl, cb, instructions, ingredients, author);
+
+        try{
+            Timestamp time = (Timestamp) json.get(LAST_UPDATED) ;
+            re.setLastUpdated(time.getSeconds());
+        }catch (Exception e){
+
+        }
 
         return re;
     }
+
+    public static Long getLocalLastUpdate() {
+        SharedPreferences sharedPref = MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        return sharedPref.getLong(LOCAL_LAST_UPDATED, 0);
+    }
+
+    public static void setLocalLastUpdate(Long time) {
+        SharedPreferences sharedPref = MyApplication.getAppContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong(LOCAL_LAST_UPDATED,time);
+        editor.commit();
+    }
+
 
     public Map<String,Object> toJson(){
         Map<String, Object> json = new HashMap<>();
@@ -59,6 +86,7 @@ public class Recipe {
         json.put("ingredients",getIngredients());
         json.put("author",getAuthor());
         json.put("cb", getCb());
+        json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         return json;
     }
 
@@ -104,7 +132,6 @@ public class Recipe {
         return ingredients;
     }
 
-
     public void setInstructions(String instructions) {
         this.instructions = instructions;
     }
@@ -122,4 +149,11 @@ public class Recipe {
     }
 
 
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
 }

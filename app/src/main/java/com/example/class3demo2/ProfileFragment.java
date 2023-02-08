@@ -46,17 +46,17 @@ public class ProfileFragment extends RecipesListFragment {
         adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
-        @Override
-        public void onItemClick(int pos) {
-            Log.d("TAG", "Row was clicked " + pos);
-            Recipe re = viewModel.getData().get(pos);
-            ProfileFragmentDirections.ActionProfileToFragmentUserRecipePage action = ProfileFragmentDirections.actionProfileToFragmentUserRecipePage(re.getName(),re.getIngredients(),re.getInstructions(),re.getAvatarUrl());
-            Navigation.findNavController(view).navigate(action);
-        }
+            @Override
+            public void onItemClick(int pos) {
+                Log.d("TAG", "Row was clicked " + pos);
+                Recipe re = viewModel.getData().get(pos);
+                ProfileFragmentDirections.ActionProfileToFragmentUserRecipePage action = ProfileFragmentDirections.actionProfileToFragmentUserRecipePage(re.getName(),re.getIngredients(),re.getInstructions(),re.getAvatarUrl());
+                Navigation.findNavController(view).navigate(action);
+            }
         });
 
 
-         return view;
+        return view;
     }
 
     @Override

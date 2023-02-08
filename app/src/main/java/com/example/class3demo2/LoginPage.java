@@ -43,7 +43,7 @@ public class LoginPage extends AppCompatActivity {
         Button login = findViewById(R.id.login);
         TextInputEditText emailEt = findViewById(R.id.emailEt);
         TextInputEditText passEt = findViewById(R.id.passEt);
-        TextView error = findViewById(R.id.welcome);
+        TextView error = findViewById(R.id.wrong1);
         //scroll down :
         ImageView scrollBtn = findViewById(R.id.scroll);
         ScrollView scroll = findViewById(R.id.scrollWelcome);
@@ -107,6 +107,7 @@ public class LoginPage extends AppCompatActivity {
 
                     } else {
                         error.setText("email or password wrong");
+
                     }
                 });
             }

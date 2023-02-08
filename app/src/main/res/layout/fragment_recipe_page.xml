@@ -183,7 +183,7 @@
                     android:layout_marginLeft="16sp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/button"
-                    android:text="Translate"
+                    android:text="Translate Recipe Name"
                     android:textAllCaps="false" />
             </LinearLayout>
 

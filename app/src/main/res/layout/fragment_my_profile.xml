@@ -31,7 +31,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="411dp"
         android:layout_height="183dp"
-        android:background="#DEEEEA"
+        android:background="@drawable/userrrrrback"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

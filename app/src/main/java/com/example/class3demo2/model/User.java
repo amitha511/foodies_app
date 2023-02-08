@@ -11,6 +11,8 @@ public class User {
     public String avatarUrl="";
 
     public User(){}
+
+
     public User(String firstName, String lastName, String email,String avatarUrl) {
         this.firstName = firstName;
         this.lastName = lastName;

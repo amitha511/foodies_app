@@ -42,10 +42,10 @@ public class UserRecipePageFragment extends RecipeFragment {
         if (instructions != null){
             binding.InstructionsTv.setText(instructions);
         }
-        if (avatarImg != ""){
-            Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
-        }else{
+        if ( avatarImg.isEmpty() ||avatarImg == ""){
             binding.avatarImg.setImageResource(R.drawable.photorecipe);
+        }else{
+            Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
         }
 
         binding.recipeEditBtn.setOnClickListener((view2)->{
