@@ -49,12 +49,6 @@ public class Model {
 
     public void getAllRecipes(Listener<List<Recipe>> callback) {
          firebaseModel.getAllRecipes(callback);
-//        executor.execute(()->{
-//            List<Recipe> data = localDb.recipeDao().getAll();
-//            mainHandler.post(()->{
-//                callback.onComplete(data);
-//            });
-//        });
     }
                 //******************** for cache*********************
     public enum LoadingState{
@@ -107,14 +101,6 @@ public class Model {
 
     public void addRecipe(Recipe re, Listener<Void> listener) {
         firebaseModel.addRecipe(re, listener);
-        //refreshAllRecipes();       ********************** for cache******
-//        executor.execute(()->{
-//            localDb.recipeDao().insertAll(re);
-//            mainHandler.post(()->{
-//                listener.onComplete();
-//            });
-//
-//        });
     }
 
 
@@ -129,13 +115,6 @@ public class Model {
 
     public void addUser(User us, Listener<Void> listener) {
         firebaseModel.addUser(us, listener);
-//        executor.execute(()->{
-//            localDb.recipeDao().insertAll(re);
-//            mainHandler.post(()->{
-//                listener.onComplete();
-//            });
-//
-//        });
     }
 
     public void saveLike(String namePost){
