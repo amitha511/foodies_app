@@ -21,7 +21,6 @@ import com.example.class3demo2.model.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
-
 public class EditUserFragment extends RegisterUserFragment {
     FragmentEditUserBinding binding;
     String firstname;

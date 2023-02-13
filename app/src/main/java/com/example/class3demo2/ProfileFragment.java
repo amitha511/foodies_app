@@ -19,6 +19,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+<<<<<<< Updated upstream
+=======
+
+
+
+>>>>>>> Stashed changes
 public class ProfileFragment extends RecipesListFragment {
     FragmentMyProfileBinding binding;
     String email;

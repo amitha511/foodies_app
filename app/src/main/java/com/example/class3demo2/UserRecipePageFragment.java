@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class UserRecipePageFragment extends RecipeFragment {
 
     FragmentUserRecipePageBinding binding;

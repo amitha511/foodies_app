@@ -29,6 +29,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 public class RecipesListFragment extends Fragment {
     FragmentRecipeListBinding binding;
     RecipeRecyclerAdapter adapter;
