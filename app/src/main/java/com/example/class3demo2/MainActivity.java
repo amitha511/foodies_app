@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         Model.instance().isSignedIn(s-> {
             if(s == Boolean.FALSE){
-                Intent i = new Intent(MainActivity.this, LoginPage.class);
+                Intent i = new Intent(MainActivity.this, LoginPage.class); //moveto login activity page
                 startActivity(i);
                 finish();
             }

@@ -1,5 +1,8 @@
 package com.example.class3demo2;
 
+import static com.example.class3demo2.MyApplication.getAppContext;
+import static com.example.class3demo2.model.Model.isOnline;
+
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,14 +59,16 @@ public class RecipeFragment extends Fragment {
         }else{
             Picasso.get().load(avatarImg).error(R.drawable.errorpizza).into(binding.avatarImg);
         }
+        if(isOnline(getAppContext())) {
 
-        Model.instance().getAllLikes(likes->{
-            if(likes.contains(title))
-                binding.like.setChecked(true);
-            else{
-                binding.like.setChecked(false);
-            }
-        });
+            Model.instance().getAllLikes(likes -> {
+                if (likes.contains(title))
+                    binding.like.setChecked(true);
+                else {
+                    binding.like.setChecked(false);
+                }
+            });
+        }
 
         //View button = view.findViewById(R.id.recipe_back_btn);
         binding.backBtn.setOnClickListener((view1)->{

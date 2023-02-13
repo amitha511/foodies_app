@@ -1,5 +1,8 @@
 package com.example.class3demo2;
 
+import static com.example.class3demo2.MyApplication.getAppContext;
+import static com.example.class3demo2.model.Model.isOnline;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -23,6 +26,8 @@ import com.example.class3demo2.model.Model;
 import com.example.class3demo2.model.Recipe;
 import com.squareup.picasso.Picasso;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -38,7 +43,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
     List<Recipe> data;
     RecipeListRowBinding binding;
 
-    //create 1 student row
+    //create 1 recipe row
     public RecipeViewHolder(@NonNull View itemView, RecipeRecyclerAdapter.OnItemClickListener listener, List<Recipe> data) {
         super(itemView);
         this.data = data;
@@ -56,7 +61,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
                 Model.instance().saveLike(re.name);
             }
         });
-        itemView.setOnClickListener(new View.OnClickListener() {  //click on student in the list
+        itemView.setOnClickListener(new View.OnClickListener() {  //click on recipe in the list
             @Override
             public void onClick(View view) {
                 int pos = getAdapterPosition();
@@ -65,19 +70,20 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    //bind the student to element in the fragment
+    //bind the recipe to element in the fragment
     public void bind(Recipe re, int pos) {
         nameTv.setText(re.name);
       //  idTv.setText(re.id);
-        Model.instance().getAllLikes(likes->{
-            if(likes.contains(re.name)){
-                cb.setChecked(true);
+        if(isOnline(getAppContext())) {
+            Model.instance().getAllLikes(likes -> {
+                if (likes.contains(re.name)) {
+                    cb.setChecked(true);
 
-            }else{
-                cb.setChecked(false);
-            }
-        });
-
+                } else {
+                    cb.setChecked(false);
+                }
+            });
+        }
         Log.d("bol",re.getCb().toString());
         cb.setTag(pos);
         Log.d("avatar",re.getAvatarUrl().toString());

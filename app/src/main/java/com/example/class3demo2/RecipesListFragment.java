@@ -48,6 +48,8 @@ public class RecipesListFragment extends Fragment {
 
         getActivity().findViewById(R.id.main_bottomNavigationView).setVisibility(View.VISIBLE);
 
+
+        //list :
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getLiveData().getValue());
@@ -63,11 +65,12 @@ public class RecipesListFragment extends Fragment {
             }
         });
         binding.progressBar.setVisibility(View.GONE);
-
+//------------------
         Model.instance().EventRecipesListLoadingState.observe(getViewLifecycleOwner(),status->{
             binding.swipeRefresh.setRefreshing(status == Model.LoadingState.LOADING);
         });
 
+        //update cache
         viewModel.getLiveData().observe( getViewLifecycleOwner(),list->{
             Collections.sort(list, Comparator.comparing(Recipe::getName));
             adapter.setData(list);
@@ -92,7 +95,7 @@ public class RecipesListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         reloadData();
-        //list of student
+        //list of recipe
     }
 
     void reloadData(){

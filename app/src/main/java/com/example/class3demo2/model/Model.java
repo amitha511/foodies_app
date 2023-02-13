@@ -1,6 +1,9 @@
 package com.example.class3demo2.model;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -137,10 +140,16 @@ public class Model {
 //
 //        });
     }
-
     public void saveLike(String namePost){
         firebaseModel.saveLike(namePost);
     }
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
 
     public void getAllLikes(Listener<List<String>> listener){
         firebaseModel.getLike(listener);
@@ -181,6 +190,7 @@ public class Model {
         firebaseModel.logOut();
     }
 
+
     //api
     public interface TranslateAPI {
         @Headers({"content-type: application/x-www-form-urlencoded",
@@ -213,10 +223,8 @@ public class Model {
                         //convert from json to object
                         Gson gson = new Gson();
                         TranslateResponse translateResponse = gson.fromJson(responseString, TranslateResponse.class);
-                        String translatedText = translateResponse.getData().getTranslations().get(0).getTranslatedText();
-
+                        String translatedText = translateResponse.getData().getTranslations().get(0).getTranslatedText(); // convert to string
                         // return String
-                        Log.d("res1","********" + translatedText);
                         listener.onComplete(translatedText);
                     } catch (IOException e) {
                         // handle IOException

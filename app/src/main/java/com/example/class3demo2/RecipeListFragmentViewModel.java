@@ -9,10 +9,11 @@ import com.example.class3demo2.model.Recipe;
 import java.util.LinkedList;
 import java.util.List;
 
+//cache
 public class RecipeListFragmentViewModel extends ViewModel {
 
     private List<Recipe> data = new LinkedList<>();
-    private LiveData<List<Recipe>> liveData = Model.instance().getAllRecipesNew();
+    private LiveData<List<Recipe>> liveData = Model.instance().getAllRecipesNew(); //cache = livedata
 
     List<Recipe> getData(){
         return data;

@@ -40,6 +40,7 @@ public class LoginPage extends AppCompatActivity {
 
         //login details:
         setContentView(R.layout.fragment_welcome_page);
+
         Button login = findViewById(R.id.login);
         TextInputEditText emailEt = findViewById(R.id.emailEt);
         TextInputEditText passEt = findViewById(R.id.passEt);

@@ -2,13 +2,18 @@ package com.example.class3demo2.model;
 
 import static com.google.android.material.internal.ContextUtils.getActivity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.class3demo2.MyApplication;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,9 +43,9 @@ import java.util.concurrent.Executor;
 
 public class FirebaseModel {
 
-    FirebaseFirestore db;
-    FirebaseStorage storage;
-    FirebaseAuth mAuth;
+    FirebaseFirestore db; //user,likes,recipes
+    FirebaseStorage storage; // images
+    FirebaseAuth mAuth; //users accounts
 
     FirebaseModel(){
         db = FirebaseFirestore.getInstance();
@@ -128,7 +133,7 @@ public class FirebaseModel {
                 });
     }
 
-    public void login(String email, String password,Model.Listener<Boolean> listener){
+    public void login(String email, String password,Model.Listener<Boolean> listener){ // login user
         if(!email.isEmpty() && !password.isEmpty()) {
             mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -150,7 +155,7 @@ public class FirebaseModel {
         });
     }
 
-    public void isSignedIn(Model.Listener<Boolean> listener){
+    public void isSignedIn(Model.Listener<Boolean> listener){ //check if the user connected to app
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             listener.onComplete(true);
@@ -244,6 +249,8 @@ public class FirebaseModel {
         });
     }
 
+
+
     public void getLike(Model.Listener<List<String>> listener){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         db.collection("likes").document(user.getEmail()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -259,8 +266,5 @@ public class FirebaseModel {
             }
         });
     }
-
-
-
 
 }

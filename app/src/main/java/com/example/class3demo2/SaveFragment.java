@@ -1,5 +1,8 @@
 package com.example.class3demo2;
 
+import static com.example.class3demo2.MyApplication.getAppContext;
+import static com.example.class3demo2.model.Model.isOnline;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -55,16 +58,18 @@ public class SaveFragment extends RecipesListFragment {
         binding.progressBar2.setVisibility(View.VISIBLE);
         Model.instance().getAllRecipes((reList)->{
             viewModel.getData().removeAll(viewModel.getData());
-
-            Model.instance().getAllLikes(likes->{
-                for(Recipe re : reList){
-                    if(likes.contains(re.name))
-                        viewModel.getData().add(re);
-                }
-                Collections.sort(viewModel.getData(), Comparator.comparing(Recipe::getName));
-                adapter.setData(viewModel.getData());
-            });
+            if(isOnline(getAppContext())) {
+                Model.instance().getAllLikes(likes -> {
+                    for (Recipe re : reList) {
+                        if (likes.contains(re.name))
+                            viewModel.getData().add(re);
+                    }
+                    Collections.sort(viewModel.getData(), Comparator.comparing(Recipe::getName));
+                    adapter.setData(viewModel.getData());
+                });
+            }
         });
+
         binding.progressBar2.setVisibility(View.GONE);
 
     }
