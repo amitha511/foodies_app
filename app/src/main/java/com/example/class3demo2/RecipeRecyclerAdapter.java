@@ -68,7 +68,7 @@ class RecipeViewHolder extends RecyclerView.ViewHolder {
     //bind the student to element in the fragment
     public void bind(Recipe re, int pos) {
         nameTv.setText(re.name);
-        idTv.setText(re.id);
+      //  idTv.setText(re.id);
         Model.instance().getAllLikes(likes->{
             if(likes.contains(re.name)){
                 cb.setChecked(true);
