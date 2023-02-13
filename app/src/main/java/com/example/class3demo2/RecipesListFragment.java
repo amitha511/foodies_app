@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class RecipesListFragment extends Fragment {
     FragmentRecipeListBinding binding;
     RecipeRecyclerAdapter adapter;
