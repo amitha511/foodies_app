@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-
+// user page
 public class ProfileFragment extends RecipesListFragment {
     FragmentMyProfileBinding binding;
     String email;
@@ -31,8 +31,8 @@ public class ProfileFragment extends RecipesListFragment {
         binding = FragmentMyProfileBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        // ********************get the details of user from firebase **********************
         Model.instance().getCurrentUser(currentUser-> {
-//            currentUser.setUser(user);
             email = currentUser.getEmail();
             binding.email.setText(currentUser.email);
             binding.firstName.setText(currentUser.firstName);
@@ -41,15 +41,22 @@ public class ProfileFragment extends RecipesListFragment {
                 Picasso.get().load(currentUser.avatarUrl).error(R.drawable.errorpizza).into(binding.avatarImg3);
         });
 
+        //*******************************list ********************:
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //set to inflater and data live list
         adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
+
+        //click on recipe (get pos)
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
                 Log.d("TAG", "Row was clicked " + pos);
-                Recipe re = viewModel.getData().get(pos);
+                Recipe re = viewModel.getData().get(pos);   //save the recipe in line "pos"(int) ;
+
+                // send the arguments to userRecipeFragment
                 ProfileFragmentDirections.ActionProfileToFragmentUserRecipePage action = ProfileFragmentDirections.actionProfileToFragmentUserRecipePage(re.getName(),re.getIngredients(),re.getInstructions(),re.getAvatarUrl());
                 Navigation.findNavController(view).navigate(action);
             }
@@ -59,21 +66,27 @@ public class ProfileFragment extends RecipesListFragment {
         return view;
     }
 
+
     @Override
     void reloadData(){
 
-        binding.progressBar3.setVisibility(View.VISIBLE);
+        binding.progressBar3.setVisibility(View.VISIBLE); //show loading
 
-
+        //not live data !!!
         Model.instance().getAllRecipes((reList)->{
+            //relist = all the recipes in app
+            //clear the data list
             viewModel.getData().removeAll(viewModel.getData());
+
+            //get all likes of the user connect from firebase
             for(Recipe re : reList){
-                Log.d("email",email +"re.au:"+ re.author );
-                if(re.author.equals(email))
+                if(re.author.equals(email))  //filter list by email of user
                     viewModel.getData().add(re);
             }
+            //viewModel.data = list of user recipes
+            //send to adapter
             adapter.setData(viewModel.getData());
-            binding.progressBar3.setVisibility(View.GONE);
+            binding.progressBar3.setVisibility(View.GONE); //remove loading
         });
     }
 }

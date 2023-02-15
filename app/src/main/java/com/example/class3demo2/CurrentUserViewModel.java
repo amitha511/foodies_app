@@ -8,6 +8,8 @@ import com.example.class3demo2.model.User;
 import java.util.LinkedList;
 import java.util.List;
 
+
+// details of user connected
 public class CurrentUserViewModel extends ViewModel {
 
     private static User user = null;

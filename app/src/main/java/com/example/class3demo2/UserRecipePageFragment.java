@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.class3demo2.databinding.FragmentUserRecipePageBinding;
+import com.example.class3demo2.model.Model;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -21,8 +22,6 @@ import java.util.Map;
 public class UserRecipePageFragment extends RecipeFragment {
 
     FragmentUserRecipePageBinding binding;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,6 +54,16 @@ public class UserRecipePageFragment extends RecipeFragment {
 
         binding.backBtn.setOnClickListener((view1)->{
             Navigation.findNavController(view1).popBackStack();
+        });
+
+        // *************** rest api ***************
+        binding.translateBtn2.setOnClickListener(view1->{
+
+            //send the name of recipe to api and get the translate
+            Model.instance().restApi(binding.recipeTitleTv.getText().toString(), trans->{
+                binding.recipeTitleTv.setText(trans.toString());
+
+            });
         });
 
         return view;

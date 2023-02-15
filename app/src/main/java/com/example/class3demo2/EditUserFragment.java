@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,12 +23,18 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.squareup.picasso.Picasso;
 
 
-public class EditUserFragment extends RegisterUserFragment {
+//edit details profile of user (first name, last name, photo)
+public class EditUserFragment extends Fragment {
     FragmentEditUserBinding binding;
-    String firstname;
+    String firstName;
     String lastName;
     String email;
     String avatarUrl;
+    Boolean isAvatarSelected = false;
+    ActivityResultLauncher<Void> cameraLauncher;
+    ActivityResultLauncher<String> galleryAppLauncher;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,9 @@ public class EditUserFragment extends RegisterUserFragment {
                     }
                 });
 
+
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,13 +75,15 @@ public class EditUserFragment extends RegisterUserFragment {
         binding = FragmentEditUserBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
 
-        firstname = EditUserFragmentArgs.fromBundle(getArguments()).getFirstName();
+        //set from argument fragment to Strings;
+        firstName = EditUserFragmentArgs.fromBundle(getArguments()).getFirstName();
         lastName = EditUserFragmentArgs.fromBundle(getArguments()).getLastName();
         email = EditUserFragmentArgs.fromBundle(getArguments()).getEmail();
         avatarUrl = EditUserFragmentArgs.fromBundle(getArguments()).getAvatarUrl();
 
-        if (firstname != null){
-            binding.firstName.setText(firstname);
+        // set data user in the ui
+        if (firstName != null){
+            binding.firstName.setText(firstName);
         }
         if (lastName != null){
             binding.lastName.setText(lastName);
@@ -87,32 +98,43 @@ public class EditUserFragment extends RegisterUserFragment {
         }
 
         binding.saveBtnUser.setOnClickListener(view1 -> {
+
             String firstName = binding.firstName.getText().toString();
             String lastName = binding.lastName.getText().toString();
             String email = binding.email.getText().toString();
+
             if(!checkInput(firstName, lastName)) {
+                //create new user object
                 User us = new User(firstName, lastName, email, "");
 
                 if (isAvatarSelected || avatarUrl != "") {
                     binding.avatarImg2.setDrawingCacheEnabled(true);
                     binding.avatarImg2.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) binding.avatarImg2.getDrawable()).getBitmap();
+
+                    //save image in firebase
                     Model.instance().uploadImage(email, bitmap, url -> {
                         if (url != null) {
                             us.setAvatarUrl(url);
                         }
+
+                        // save user on firebase
                         Model.instance().addUser(us, (unused) -> {
-                            homePage(binding.getRoot());
+                            homePage(binding.getRoot());  //back
                         });
                     });
-                } else {
+
+                } else { // if the user not up photo
+
+                    // save user on firebase
                     Model.instance().addUser(us, (unused) -> {
-                        homePage(binding.getRoot());
+                        homePage(binding.getRoot()); //back
                     });
                 }
             }
 
         });
+
         binding.camerabutton.setOnClickListener(view1->{
             cameraLauncher.launch(null);
         });
@@ -124,7 +146,7 @@ public class EditUserFragment extends RegisterUserFragment {
         return view;
     }
 
-
+    //************check the field input***********
     public boolean checkInput(String firstName, String lastName){
         Boolean bool =false;
 
@@ -145,7 +167,6 @@ public class EditUserFragment extends RegisterUserFragment {
     }
 
 
-    @Override
     public void homePage(View view) {
         Navigation.findNavController(view).popBackStack();
     }

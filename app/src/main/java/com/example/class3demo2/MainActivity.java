@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+
         //menu bar up and down :
 
         //add menu bar:

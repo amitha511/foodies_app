@@ -48,34 +48,46 @@ public class RecipesListFragment extends Fragment {
 
         getActivity().findViewById(R.id.main_bottomNavigationView).setVisibility(View.VISIBLE);
 
-
-        //list :
+        //*******************************list ********************:
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //set to inflater and data live list
         adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getLiveData().getValue());
         binding.recyclerView.setAdapter(adapter);
 
+        //click on recipe (get pos)
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                Log.d("TAG", "Row was clicked " + pos);
+                // set the recipe
                 Recipe re = viewModel.getLiveData().getValue().get(pos);
+
+                //send data of recipes to next fragment (userRecipePage)
                 RecipesListFragmentDirections.ActionRecipesListFragmentToRecipeFragment action = RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(re.getName(),re.getIngredients(),re.getInstructions(),re.getAvatarUrl());
                 Navigation.findNavController(view).navigate(action);
             }
         });
+
+//********************************************************************************:
+
+        //done loading
         binding.progressBar.setVisibility(View.GONE);
-//------------------
+
+        //refresh >> update loading status
         Model.instance().EventRecipesListLoadingState.observe(getViewLifecycleOwner(),status->{
             binding.swipeRefresh.setRefreshing(status == Model.LoadingState.LOADING);
         });
 
-        //update cache
+
+        //update the data list by data live (cache)
         viewModel.getLiveData().observe( getViewLifecycleOwner(),list->{
-            Collections.sort(list, Comparator.comparing(Recipe::getName));
-            adapter.setData(list);
+            //list == cache - update
+            Collections.sort(list, Comparator.comparing(Recipe::getName));  //sort the cache
+            adapter.setData(list);   //set cache in the data list
         });
 
+        //update
         binding.swipeRefresh.setOnRefreshListener(()->{
             reloadData();
         });
@@ -99,14 +111,7 @@ public class RecipesListFragment extends Fragment {
     }
 
     void reloadData(){
-       // binding.progressBar.setVisibility(View.VISIBLE);
-
+        //get recipes by live data !!
         Model.instance().refreshAllRecipes();
-
-//        Model.instance().getAllRecipes((reList) -> {
-//            viewModel.setData(reList);
-//            adapter.setData(viewModel.getData());
-//
-//        });
     }
 }

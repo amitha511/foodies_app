@@ -39,6 +39,8 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.HashMap;
 
+
+//add new recipe to app
 public class AddRecipeFragment extends Fragment {
     CurrentUserViewModel currentUser;
     FragmentAddRecipeBinding binding;
@@ -53,10 +55,8 @@ public class AddRecipeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         FragmentActivity parentActivity = getActivity(); //return this
 
-
         //update menu:
         parentActivity.addMenuProvider(new MenuProvider() {
-
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 menu.removeItem(R.id.addRecipe);  //remove bottom add in up menu
@@ -74,7 +74,7 @@ public class AddRecipeFragment extends Fragment {
                     @Override
                     public void onActivityResult(Bitmap result) {
                         if (result != null) {
-                            binding.avatarImg.setImageBitmap(result);
+                            binding.avatarImg.setImageBitmap(result); //display the photo of recipe
                             isAvatarSelected = true;
                         }
                     }
@@ -100,9 +100,12 @@ public class AddRecipeFragment extends Fragment {
 
         binding = FragmentAddRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
+
+        //get email of user
         Model.instance().getCurrentUser(user -> {
             email = user.getEmail();
         });
+
         binding.saveBtn.setOnClickListener(view1 -> {
           saveRecipe(view1);
         });
@@ -127,32 +130,44 @@ public class AddRecipeFragment extends Fragment {
         String instructions = binding.instructionsEt.getText().toString();
         String ingredients = binding.ingredientsEt.getText().toString();
         String id = name;
+
+        //************check the field input***********
         if(name.isEmpty()){
             TextInputEditText input = binding.nameEt;
             input.setError("This field cannot be empty");
         }
-        else {
 
+        else {
+            //create new recipe object
             Recipe re = new Recipe(name, id, "", false, instructions, ingredients, email);
+
+
+            //********** save image recipe****************
             if (isAvatarSelected) {
                 binding.avatarImg.setDrawingCacheEnabled(true);
                 binding.avatarImg.buildDrawingCache();
                 Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+
+                //save image in firebase
                 Model.instance().uploadImage(id, bitmap, url -> {
                     if (url != null) {
                         re.setAvatarUrl(url);
                     }
+                    // save recipe on firebase
                     Model.instance().addRecipe(re, (unused) -> {
                         Navigation.findNavController(view1).popBackStack();
                     });
                 });
-            } else {
+            } else { //if the user not up photo
+
+                // save recipe on firebase
                 Model.instance().addRecipe(re, (unused) -> {
                     Navigation.findNavController(view1).popBackStack();
                 });
             }
         }
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {

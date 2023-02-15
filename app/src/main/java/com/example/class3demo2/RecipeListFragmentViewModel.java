@@ -12,8 +12,9 @@ import java.util.List;
 //cache
 public class RecipeListFragmentViewModel extends ViewModel {
 
-    private List<Recipe> data = new LinkedList<>();
-    private LiveData<List<Recipe>> liveData = Model.instance().getAllRecipesNew(); //cache = livedata
+    private List<Recipe> data = new LinkedList<>();  //list recipes - for display data that not in cache (likes, user recipes)
+
+    private LiveData<List<Recipe>> liveData = Model.instance().getAllRecipesNew(); //cache recipes = livedata
 
     List<Recipe> getData(){
         return data;

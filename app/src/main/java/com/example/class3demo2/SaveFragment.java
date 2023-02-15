@@ -37,15 +37,22 @@ public class SaveFragment extends RecipesListFragment {
         binding = FragmentSaveRecipeBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        //*******************************list ********************:
         binding.recyclerView.setHasFixedSize(true);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //set to inflater and data live list
         adapter = new RecipeRecyclerAdapter(getLayoutInflater(),viewModel.getData());
         binding.recyclerView.setAdapter(adapter);
+
+        //click on recipe (get pos)
         adapter.setOnItemClickListener(new RecipeRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int pos) {
-                Log.d("TAG", "Row was clicked " + pos);
+                // set the recipe
                 Recipe re = viewModel.getData().get(pos);
+
+                //send data of recipes to next fragment (RecipeFragment)
                 SaveFragmentDirections.ActionLikesFragmentToRecipeFragment action = SaveFragmentDirections.actionLikesFragmentToRecipeFragment(re.name,re.ingredients,re.instructions,re.avatarUrl);
                 Navigation.findNavController(view).navigate(action);
             }
@@ -56,14 +63,23 @@ public class SaveFragment extends RecipesListFragment {
     @Override
     void reloadData(){
         binding.progressBar2.setVisibility(View.VISIBLE);
+
+        //get all recipes (not live data)
         Model.instance().getAllRecipes((reList)->{
+            //relist = all the recipes in app
+            //clear the data list
             viewModel.getData().removeAll(viewModel.getData());
+
+            //get all likes of the user connect from firebase
             if(isOnline(getAppContext())) {
                 Model.instance().getAllLikes(likes -> {
                     for (Recipe re : reList) {
+                        //filter the relist by name recipes in likes list and save in data list
                         if (likes.contains(re.name))
                             viewModel.getData().add(re);
+
                     }
+                    //sort the data and send to adapter
                     Collections.sort(viewModel.getData(), Comparator.comparing(Recipe::getName));
                     adapter.setData(viewModel.getData());
                 });

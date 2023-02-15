@@ -31,6 +31,7 @@ public class LoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("Foodies");
 
+        //check if the user connect
         Model.instance().isSignedIn(status ->{
             if(status == Boolean.TRUE){
                 Model.instance().logout();
@@ -38,14 +39,19 @@ public class LoginPage extends AppCompatActivity {
         });
 
 
-        //login details:
+        //**************************************login details***************************:
         setContentView(R.layout.fragment_welcome_page);
 
+        //binding:
         Button login = findViewById(R.id.login);
         TextInputEditText emailEt = findViewById(R.id.emailEt);
         TextInputEditText passEt = findViewById(R.id.passEt);
         TextView error = findViewById(R.id.wrong1);
-        //scroll down :
+
+        //*****************************************************************:
+
+        //***********************************scroll down to register *************************:
+        //binding:
         ImageView scrollBtn = findViewById(R.id.scroll);
         ScrollView scroll = findViewById(R.id.scrollWelcome);
 
@@ -53,11 +59,16 @@ public class LoginPage extends AppCompatActivity {
             scroll.fullScroll(scroll.FOCUS_DOWN);
         });
 
-        //register details:
-        ImageButton camerabutton = findViewById(R.id.camerabutton);
-        ImageButton gallerybutton = findViewById(R.id.gallerybutton);
+        //*****************************************************************:
+
+
+        //**************************************register details***************************:
         ActivityResultLauncher<Void> cameraLauncher;
         ActivityResultLauncher<String> galleryAppLauncher;
+
+        //binding :
+        ImageButton camerabutton = findViewById(R.id.camerabutton);
+        ImageButton gallerybutton = findViewById(R.id.gallerybutton);
         ImageView avatarRegister = findViewById(R.id.avatarImg2);
         TextInputEditText firstName = findViewById(R.id.first_name); ;
         TextInputEditText lastName = findViewById(R.id.last_name);;
@@ -87,13 +98,19 @@ public class LoginPage extends AppCompatActivity {
                         }
                     }
                 });
+//*****************************************************************************
 
 
-        //to connect
+
+
+//******************************** login to user ******************************************
+
         login.setOnClickListener(view1->{
-
+            //save text
             String email = emailEt.getText().toString();
             String password = passEt.getText().toString();
+
+            //check the filed input
             if(email.isEmpty() || password.isEmpty()){
                 TextInputEditText em = emailEt;
                 em.setError("This field cannot be empty");
@@ -101,7 +118,8 @@ public class LoginPage extends AppCompatActivity {
                 pas.setError("This field cannot be empty");
 
             }
-            else {
+            else {  //if filed not empty
+                //login to the user:
                 Model.instance().login(email, password, status -> {
                     if (status) {
                         homePage();
@@ -114,33 +132,49 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
+//*****************************************************************************
 
+
+//******************************** create new user - register ******************************************
+        //binding
         Button saveBtn = findViewById(R.id.saveBtnUser);
 
+        //create user + save in firebase + connect to the new user
         saveBtn.setOnClickListener(view1 -> {
+                //check the filed input
             if(!checkInput(emailRegister,passwordRegister,firstName,lastName)){
-
+                // save the user in firebase auth and connect
                 Model.instance().createUserWithEmailAndPassword(emailRegister.getText().toString(), passwordRegister.getText().toString(), status->{
-                    if(status){
-                        User us = new User(firstName.getText().toString(),lastName.getText().toString(), emailRegister.getText().toString(),"");
 
+                    if(status){   //if connect is success
+                        //create user with details
+                        User us = new User(firstName.getText().toString(),lastName.getText().toString(), emailRegister.getText().toString(),"");
+                        //save image user
                         if(isAvatarSelected){
                             avatarRegister.setDrawingCacheEnabled(true);
                             avatarRegister.buildDrawingCache();
                             Bitmap bitmap = ((BitmapDrawable) avatarRegister.getDrawable()).getBitmap();
+
+                            //save in firebase store the image and return url
                             Model.instance().uploadImage(emailRegister.getText().toString(),bitmap, url->{
                                 if(url != null){
                                     us.setAvatarUrl(url);
                                 }
+                                //save the details of the user in firebase
                                 Model.instance().addUser(us,(unused)->{
+                                    //go to main activity and finish login activity
                                     Intent i = new Intent(LoginPage.this, MainActivity.class);
                                     startActivity(i);
+                                    //finish login activity
                                     finish();
                                 });
                             });
                         }
+                        //photo is empty
                         else {
+                            //save the user in firebase
                             Model.instance().addUser(us, (unused) -> {
+                                //go to main activity and finish login activity
                                 homePage();
                             });
                         }
@@ -161,7 +195,11 @@ public class LoginPage extends AppCompatActivity {
 
     }
 
+//*****************************************************************************
 
+
+
+//********************************check the field input***********
     public boolean checkInput(TextInputEditText email,TextInputEditText password,TextInputEditText firstName,TextInputEditText lastName){
         Boolean bool =false;
         if(email.getText().toString().isEmpty()) {
@@ -190,7 +228,11 @@ public class LoginPage extends AppCompatActivity {
 
         return bool;
     }
-    
+
+    //*****************************************************************************
+
+
+    //go to main activity and finish login activity
     public void homePage(){
         Intent i = new Intent(LoginPage.this, MainActivity.class);
         startActivity(i);

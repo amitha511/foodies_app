@@ -37,11 +37,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+//for edit recipe user and save (photo recipe, ingredients,instructions )
 public class EditUserRecipePageFragment extends AddRecipeFragment {
     String title;
     String ingredients;
     String instructions;
     String imageString;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +51,7 @@ public class EditUserRecipePageFragment extends AddRecipeFragment {
         // Inflate the layout for this fragment
         binding = FragmentAddRecipeBinding.inflate(inflater,container,false);
         View view = binding.getRoot();
+
         getElement();
         Model.instance().getCurrentUser(user -> {
             email = user.getEmail();
@@ -76,11 +79,14 @@ public class EditUserRecipePageFragment extends AddRecipeFragment {
     }
 
     public void getElement(){
+
+        //set from argument fragment to Strings;
         title = RecipeFragmentArgs.fromBundle(getArguments()).getNameRecipe();
         ingredients = RecipeFragmentArgs.fromBundle(getArguments()).getIngredients();
         instructions = RecipeFragmentArgs.fromBundle(getArguments()).getInstructions();
         imageString = (RecipeFragmentArgs.fromBundle(getArguments()).getAvatarUrl());
 
+        // set data user in the ui
         if (title != null){
             binding.nameEt.setText(title);
         }
@@ -97,31 +103,42 @@ public class EditUserRecipePageFragment extends AddRecipeFragment {
             Picasso.get().load(imageString).error(R.drawable.errorpizza).into(binding.avatarImg);
         }
 
+        //set Enabled name of recipe
         binding.nameEt.setEnabled(false);
         binding.styleNameEt.setStartIconDrawable(null);
     }
 
     @Override
     public void saveRecipe(View view1) {
+
         String name = binding.nameEt.getText().toString();
         String instructions = binding.instructionsEt.getText().toString();
         String ingredients = binding.ingredientsEt.getText().toString();
         String id = name;
 
-            Recipe re = new Recipe(name, id, "", false, instructions, ingredients, email);
-            if (isAvatarSelected || imageString != "") {
+        // create new recipe object
+        Recipe re = new Recipe(name, id, "", false, instructions, ingredients, email);
+
+        //********** save image recipe****************
+        if (isAvatarSelected || imageString != "") {
                 binding.avatarImg.setDrawingCacheEnabled(true);
                 binding.avatarImg.buildDrawingCache();
                 Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+
+                //save the photo in firebase and return the url
                 Model.instance().uploadImage(id, bitmap, url -> {
                     if (url != null) {
                         re.setAvatarUrl(url);
                     }
+
+                    //save recipe                  //null
                     Model.instance().addRecipe(re, (unused) -> {
                         Navigation.findNavController(view1).popBackStack();
                     });
                 });
+
             } else {
+
                 Model.instance().addRecipe(re, (unused) -> {
                     Navigation.findNavController(view1).popBackStack();
                 });

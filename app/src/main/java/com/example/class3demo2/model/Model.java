@@ -52,12 +52,7 @@ public class Model {
 
     public void getAllRecipes(Listener<List<Recipe>> callback) {
          firebaseModel.getAllRecipes(callback);
-//        executor.execute(()->{
-//            List<Recipe> data = localDb.recipeDao().getAll();
-//            mainHandler.post(()->{
-//                callback.onComplete(data);
-//            });
-//        });
+
     }
                 //******************** for cache*********************
     public enum LoadingState{
@@ -110,14 +105,6 @@ public class Model {
 
     public void addRecipe(Recipe re, Listener<Void> listener) {
         firebaseModel.addRecipe(re, listener);
-        //refreshAllRecipes();       ********************** for cache******
-//        executor.execute(()->{
-//            localDb.recipeDao().insertAll(re);
-//            mainHandler.post(()->{
-//                listener.onComplete();
-//            });
-//
-//        });
     }
 
 
@@ -132,13 +119,7 @@ public class Model {
 
     public void addUser(User us, Listener<Void> listener) {
         firebaseModel.addUser(us, listener);
-//        executor.execute(()->{
-//            localDb.recipeDao().insertAll(re);
-//            mainHandler.post(()->{
-//                listener.onComplete();
-//            });
-//
-//        });
+
     }
     public void saveLike(String namePost){
         firebaseModel.saveLike(namePost);
@@ -190,12 +171,11 @@ public class Model {
         firebaseModel.logOut();
     }
 
-
     //api
     public interface TranslateAPI {
         @Headers({"content-type: application/x-www-form-urlencoded",
                 "Accept-Encoding: application/gzip",
-                "X-RapidAPI-Key: 1d7822b503mshee9d8ae2c3caa64p15c394jsn4a064b10b3af",
+                "X-RapidAPI-Key: e175984e71msh6747f7d1396e2c2p128431jsn185b4b5207f7",
                 "X-RapidAPI-Host: google-translate1.p.rapidapi.com"})
         @POST("language/translate/v2")
         @FormUrlEncoded
