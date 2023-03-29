@@ -21,4 +21,5 @@ public class CurrentUserViewModel extends ViewModel {
     public User getUser() {
         return user;
     }
+
 }
