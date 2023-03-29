@@ -13,9 +13,6 @@
 
 <br>
 
-<p align = "center">
-    <img src = https://github.com/amitha511/foodies_App/blob/main/video.gif width="200" height="380" alt="animated" />
-
 ## Features:
 
 - Creating a new user in the application / connecting to the application.
@@ -31,3 +28,6 @@
 - A user can log out of the application
 
 <br>
+
+<p align = "center">
+    <img src = https://github.com/amitha511/foodies_App/blob/main/video.gif width="200" height="380" />
