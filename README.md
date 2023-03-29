@@ -30,4 +30,4 @@
 <br>
 
 <p align = "center">
-    <img src = https://github.com/amitha511/foodies_App/blob/main/video.gif width="250" height="400" />
+    <img src = https://github.com/amitha511/foodies_App/blob/main/video.gif width="200" height="400" />
